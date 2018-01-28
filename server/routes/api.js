@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 const Sticky = require('../models/sticky');
+const {tks} = require('../config/config');
 
 mongoose.connect('mongodb://localhost:27017/givechain');
 mongoose.Promise= global.Promise;
@@ -113,23 +114,37 @@ router.post('/login', [
     if (!result.isEmpty()) {
         return res.status(500).json({errors: result});
     }
-
+    
     // check username, password credentials
     User.findOne({username: req.body.username}).exec()
-        .then(user => {
+        .then(user => {        
             bcrypt.compare(req.body.password, user.password, (err, same) => {
-                if (!same) {
+                if (err) {
+                    console.log("we here");
                     return res.status(500).json({errors: err});
                 }
-                // passwords match
-                    // create token
+                // same is true
+                if (same) {
+                    console.log("im here");
+                    // passwords match
+                        // create token
+                        const token = jwt.sign({id: user._id, access: 'auth'}, tks, {expiresIn: 7200});
+                        // send  token & "success" message to front end
+                        return res.status(200).json({
+                            message: 'Auth Successful',
+                            token: token
+                        });
+                }
 
-                    // send  token & "success" message to front end
-                    
-            });
+                //failed login, bad credentials
+                res.status(401).json({
+                    message:"Auth failed"
+                });
+            })
         })
         .catch(e=> {
-
+            console.log("word?");
+            res.status(500).json({errors:e});
         });
 });
 
