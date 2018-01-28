@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 const {check, validationResult} = require('express-validator/check');
 const async = require('async');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 const Sticky = require('../models/sticky');
@@ -26,6 +28,110 @@ const sendError = (err, res) => {
 };
 
 // ROUTES GO HERE
+
+    // Register User
+router.post('/register',[ 
+        check("username")
+            .isAlphanumeric()
+            .isLength({min:6, max: 20})
+            .exists()
+            .trim(),
+        check("email")
+            .exists()
+            .isEmail()
+            .normalizeEmail()
+            .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)
+            .isLength({max:100})
+            .trim(),
+        check("password")
+            .isAlphanumeric()
+            .exists()
+            .isLength({min:5})
+            .trim(),
+        check("name")
+            .exists()
+            .trim(),
+        check("address")
+            .exists()
+            .trim(),
+        check("city")
+            .exists()
+            .trim(),
+        check('state')
+            .exists()
+            .trim(),
+        check('zipcode')
+            .exists()
+            .isLength({max: 20})
+            .trim(),
+        check('phone')
+            .exists()            
+            .trim()
+    ], 
+    (req, res) => {
+        // check validity of values        
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            // there are validation errors               
+            return res.status(501).json({errors: result});
+        }
+        // hash password before saving
+        const salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(req.body.password, salt);
+        const restaurant = new User({
+            "username": req.body.username,
+            "email": req.body.email,
+            "password": hash,
+            "name": req.body.name,
+            "address": req.body.address,
+            "city": req.body.city,
+            "state": req.body.state,
+            "zipcode": req.body.zipcode,
+            "phone": req.body.phone
+        });
+        restaurant.save((err, result) => {
+            if (err) {
+                return res.status(500).json({errors: err});
+            }
+            return res.status(200).json({restaurant: result});
+        });
+
+});
+
+    // Login User
+router.post('/login', [ 
+        check('username')
+            .exists()
+            .trim(),
+        check('password')
+            .exists()
+            .trim()
+    ], 
+    (req, res) => {
+    // validate values
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.status(500).json({errors: result});
+    }
+
+    // check username, password credentials
+    User.findOne({username: req.body.username}).exec()
+        .then(user => {
+            bcrypt.compare(req.body.password, user.password, (err, same) => {
+                if (!same) {
+                    return res.status(500).json({errors: err});
+                }
+                // passwords match
+                    // create token
+
+                    // send  token & "success" message to front end
+                    
+            });
+        })
+        .catch(e=> {
+
+        });
+});
 
     // Get All Stickies
 router.get('/sticky', (req, res) => {
@@ -54,6 +160,8 @@ router.get('/sticky', (req, res) => {
         });
     
 });
+
+// #TODO - protect these routes below using jwt
 
     // Create Sticky
 router.post('/sticky', [
@@ -136,73 +244,24 @@ router.patch('/sticky', [
 });
 
     // Delete Sticky
+router.delete('/sticky/:id', (req, res) => {
+    // get sticky id from req.body
+    const id = req.params.id;
 
-    // Register User
-    router.post('/user',[ 
-        check("username")
-            .isAlphanumeric()
-            .isLength({min:6, max: 20})
-            .exists()
-            .trim(),
-        check("email")
-            .exists()
-            .isEmail()
-            .normalizeEmail()
-            .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)
-            .isLength({max:100})
-            .trim(),
-        check("password")
-            .isAlphanumeric()
-            .exists()
-            .isLength({min:5})
-            .trim(),
-        check("name")
-            .exists()
-            .trim(),
-        check("address")
-            .exists()
-            .trim(),
-        check("city")
-            .exists()
-            .trim(),
-        check('state')
-            .exists()
-            .trim(),
-        check('zipcode')
-            .exists()
-            .isLength({max: 20})
-            .trim(),
-        check('phone')
-            .exists()            
-            .trim()
-    ], 
-    (req, res) => {
-        // check validity of values        
-        const result = validationResult(req);
-        if (!result.isEmpty()) {
-            // there are validation errors               
-            return res.status(501).json({errors: result});
-        }
-
-        const restaurant = new User({
-            "username": req.body.username,
-            "email": req.body.email,
-            "password": req.body.password,
-            "name": req.body.name,
-            "address": req.body.address,
-            "city": req.body.city,
-            "state": req.body.state,
-            "zipcode": req.body.zipcode,
-            "phone": req.body.phone
-        });
-        restaurant.save((err, result) => {
-            if (err) {
-                return res.status(500).json({errors: err});
-            }
-            return res.status(200).json({restaurant: result});
+    Sticky.findByIdAndRemove(id).exec()
+        .then(sticky => {
+            return res.status(200).json({
+                sticky,
+                message: "Sticky Deleted"
+            });
+        })
+        .catch(e => {
+            return res.status(500).json(e);
         });
 
 });
+
+
     // *** sample route: localhost:3000/api/users
 //  router.get('/users', (req, res) => {
 //     var user = new User({
