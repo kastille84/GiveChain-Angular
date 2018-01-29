@@ -28,6 +28,24 @@ const sendError = (err, res) => {
     res.status(501).json(response);
 };
 
+const authenticate = (req, res, next) => {
+    // get token from header in the frontend
+    const token = req.headers.auth;
+    // check token
+    jwt.verify(token, tks, (err, decoded) => {
+        if (decoded) {
+            req.decoded = decoded;
+            next();
+        }
+        if (err) {
+            console.log(token);
+            return res.status(401).json({errors: err, stoken: token});
+        }
+    });
+    
+    
+};
+
 // ROUTES GO HERE
 
     // Register User
@@ -120,30 +138,27 @@ router.post('/login', [
         .then(user => {        
             bcrypt.compare(req.body.password, user.password, (err, same) => {
                 if (err) {
-                    console.log("we here");
                     return res.status(500).json({errors: err});
                 }
                 // same is true
                 if (same) {
-                    console.log("im here");
                     // passwords match
                         // create token
                         const token = jwt.sign({id: user._id, access: 'auth'}, tks, {expiresIn: 7200});
                         // send  token & "success" message to front end
                         return res.status(200).json({
-                            message: 'Auth Successful',
+                            message: 'Auth Success',
                             token: token
                         });
                 }
 
                 //failed login, bad credentials
                 res.status(401).json({
-                    message:"Auth failed"
+                    message:"Auth Failed"
                 });
             })
         })
         .catch(e=> {
-            console.log("word?");
             res.status(500).json({errors:e});
         });
 });
@@ -179,7 +194,7 @@ router.get('/sticky', (req, res) => {
 // #TODO - protect these routes below using jwt
 
     // Create Sticky
-router.post('/sticky', [
+router.post('/sticky', authenticate, [
         check("title")
             .exists()
             .isLength({max:50})
@@ -188,8 +203,8 @@ router.post('/sticky', [
             .isLength({max:150})
             .trim()
 
-    ] 
-    ,(req, res) => {
+    ], 
+    (req, res) => {
         // check validity of values
         const result = validationResult(req);
         if (!result.isEmpty()) {
@@ -198,10 +213,11 @@ router.post('/sticky', [
         }
 
         // find user associated with the stickies
-        // #TODO - need to get restaurant_id from logged in user, 
+        // get restaurant_id from decoded jwt  
+        const id = req.decoded.id;
             // currently we are just grabbing the 1st user on the collection
         // #TODO - currently saved sticky must be associated with user        
-        User.findOne({username: "serene86"}).then((doc) => {            
+        User.findOne({_id: id}).then((doc) => {            
             const sticky = new Sticky({
                 "title": req.body.title,
                 "message": req.body.message,
@@ -222,7 +238,7 @@ router.post('/sticky', [
 });
 
     // Update Sticky
-router.patch('/sticky', [
+router.patch('/sticky', authenticate, [
         check("title")
             .exists()
             .isLength({max:50})
@@ -259,7 +275,7 @@ router.patch('/sticky', [
 });
 
     // Delete Sticky
-router.delete('/sticky/:id', (req, res) => {
+router.delete('/sticky/:id', authenticate, (req, res) => {
     // get sticky id from req.body
     const id = req.params.id;
 
