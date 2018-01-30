@@ -168,26 +168,36 @@ router.get('/sticky', (req, res) => {
     // ?city=newburgh&state=ny
     const city = req.query.city;
     const state = req.query.state
+
+    if (!city || ! state) {
+        return res.status(500).json({error: "Missing City and/or State"});
+    }
     // get all stickies
     let stickyArray = [];
     
     Sticky.find({}).populate("restaurant").exec()
-        .then( (stickies) => {
-            for(sticky of stickies) {
-                if ( (sticky.restaurant.city).toLowerCase() == city.toLowerCase() &&
-                    (sticky.restaurant.state).toLowerCase() == state.toLowerCase()) {
-                        stickyArray.push(sticky);
-                        console.log('hi')
+        .then( 
+            (stickies) => {
+                for(sticky of stickies) {
+                    if ( (sticky.restaurant.city).toLowerCase() == city.toLowerCase() &&
+                        (sticky.restaurant.state).toLowerCase() == state.toLowerCase()) {
+                            stickyArray.push(sticky);
+                            console.log('hi')
+                    }
                 }
-            }            
-           return  res.status(200).json({
-               stickyArray,
-               message: "Got All Stickies"
-            });
-        })
-        .catch(e => {
-            return res.status(500).json({error: e});
-        });
+                if (stickyArray.length == 0) {
+                    // doesn't match city and or state
+                    return res.status(404).json({error: "Incorrect City/State Combination"});         
+
+                }
+                return res.status(200).json({
+                    stickyArray,
+                    message: "Got All Stickies"
+                    });
+                           
+            }
+        );
+
     
 });
 
