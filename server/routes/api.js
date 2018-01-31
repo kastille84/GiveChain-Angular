@@ -92,7 +92,7 @@ router.post('/register',[
         const result = validationResult(req);
         if (!result.isEmpty()) {
             // there are validation errors               
-            return res.status(501).json({errors: result});
+            return res.status(400).json({errors: result});
         }
         // hash password before saving
         const salt = bcrypt.genSaltSync(10);
