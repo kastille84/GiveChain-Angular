@@ -10,6 +10,10 @@ const schema = mongoose.Schema({
         type: String,
         default: "This is for you with love. Enjoy and pass on the kindness."
     },
+    from: {
+        type: String,
+        default: "Anonymous"
+    },
     restaurant: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

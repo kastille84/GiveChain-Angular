@@ -39,7 +39,7 @@ const authenticate = (req, res, next) => {
         }
         if (err) {
             console.log(token);
-            return res.status(401).json({errors: err, stoken: token});
+            return res.status(401).json({errors: err, token: token});
         }
     });
     
@@ -153,12 +153,13 @@ router.post('/login', [
                 }
 
                 //failed login, bad credentials
-                res.status(401).json({
+                res.status(403).json({
                     message:"Auth Failed"
                 });
             })
         })
         .catch(e=> {
+            // username doens't exist
             res.status(500).json({errors:e});
         });
 });
@@ -182,7 +183,6 @@ router.get('/sticky', (req, res) => {
                     if ( (sticky.restaurant.city).toLowerCase() == city.toLowerCase() &&
                         (sticky.restaurant.state).toLowerCase() == state.toLowerCase()) {
                             stickyArray.push(sticky);
-                            console.log('hi')
                     }
                 }
                 if (stickyArray.length == 0) {
@@ -207,10 +207,13 @@ router.get('/sticky', (req, res) => {
 router.post('/sticky', authenticate, [
         check("title")
             .exists()
-            .isLength({max:50})
+            .isLength({ max:50})
             .trim(),
         check('message')
             .isLength({max:150})
+            .trim(),
+        check('from')
+            .isLength({max:50})
             .trim()
 
     ], 
@@ -235,14 +238,17 @@ router.post('/sticky', authenticate, [
             });
             sticky.save((err, result) => {
                 if (err) {
-                    return res.status(500).json({errors: err});
+                    return res.status(500).json({error: "Somethingo went wrong"});
                 }
                 return res.status(200).json({
                         restaurant: result,
                         message: "Sticky Added Successfully"
                     });
             });
-        }).catch(e => console.log(e));;
+        }).catch(e => {
+            // could not find user with said id
+            return res.status(500).json({error:"Somethingz went wrong"})
+        });
 
         
 });
@@ -291,6 +297,9 @@ router.delete('/sticky/:id', authenticate, (req, res) => {
 
     Sticky.findByIdAndRemove(id).exec()
         .then(sticky => {
+            if (!sticky) {
+                return res.status(500).json({message: 'No Sticky found in db'})
+            }
             return res.status(200).json({
                 sticky,
                 message: "Sticky Deleted"

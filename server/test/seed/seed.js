@@ -10,8 +10,8 @@ const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
 const salt = bcrypt.genSaltSync(10);
 const password = bcrypt.hashSync("ha2vu486", salt);
-const userOneToken = jwt.sign({_id: userOneId}, tks).toString();
-const userTwoToken = jwt.sign({_id: userTwoId}, tks).toString();
+const userOneToken = jwt.sign({id: userOneId}, tks).toString();
+const userTwoToken = jwt.sign({id: userTwoId}, tks).toString();
 
 // create dummy users
 const users = [
@@ -45,26 +45,31 @@ const stickies = [
     {
         title: "Cheese Pizza",
         message: "Enjoy this On Us!",
+        from: "Nasir Jones",
         restaurant: userOneId
     },
     {
         title: "Peperroni Pizza",
         message: "Enjoy this On Us!",
+        from: "Victor Santiago",
         restaurant: userOneId
     },
     {
         title: "Sicilian Pizza",
         message: "Enjoy this On Us!",
+        from: "Anthony Cruz",
         restaurant: userOneId
     },
     {
         title: "Sausage Pizza",
         message: "Enjoy this On Us!",
+        from: '',
         restaurant: userTwoId
     },
     {
         title: "Breakfast Pizza",
         message: "Enjoy this On Us!",
+        from: "Edwin Martinez",
         restaurant: userTwoId
     }
 ];
@@ -89,6 +94,7 @@ const populateStickies = function (done) {
         done();
     });
 };
+
 
 module.exports = {
     users,

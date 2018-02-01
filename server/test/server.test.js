@@ -6,11 +6,29 @@ const {ObjectID} = require('mongodb');
 const {app} = require('./../../server');
 const Sticky = require('./../models/sticky');
 const User = require('./../models/user');
-const {users, stickies, populateUsers, populateStickies, password} = require('./seed/seed')
+const {users, 
+    stickies, 
+    populateUsers, 
+    populateStickies, 
+    password,
+    userOneToken} = require('./seed/seed');
+
+let firstStickyId = null;
 
 // beforeEach, create a token
 beforeEach(populateUsers);
 beforeEach(populateStickies);
+beforeEach( function(done){
+    Sticky.findOne().exec()
+        .then(
+            (doc) => {
+                firstStickyId = doc._id;
+                done();
+            },
+            (e) => {done()},
+            
+        );
+})
 
 
 // describe
@@ -117,4 +135,168 @@ describe('POST /register', function() {
             .end(done);
     });
 
+});
+
+describe('POST /login', () => {
+
+    // test 1. Should log in user with right credendtials
+    it( 'should login user with correct credentials', function(done) {
+        request(app)
+            .post('/api/login')
+            .send({
+                username: 'kastille84',
+                password: 'ha2vu486'
+            })
+            .expect(200)
+            .end(done);
+    });
+    // test 2. username exists but wrong password
+    it('should not login user with bad password', function(done) {
+        request(app)
+            .post('/api/login')
+            .send({
+                username: 'kastille84',
+                password: 'ha2wings4765'
+            })
+            .expect(403)
+            .end(done);
+    })
+    // test 3. username doesn't exist
+    it('should not login user if username doesnt exist', function(done) {
+        request(app)
+            .post('/api/login')
+            .send({
+                username: "hotwings447",
+                password: 'yelzabubs453'
+            })
+            .expect(500)
+            .end(done);
+    });
+    // test 4. They don't pass any credentials
+    it('should not login if no form data is sent to us', function(done) {
+        request(app)
+            .post('/api/login')
+            .send({})
+            .expect(500)
+            .end(done);
+    });
+});
+
+describe("POST /sticky", () => {
+    // test 1. should create sticky
+    it('should create sticky', function(done) {
+        request(app)
+            .post('/api/sticky')
+            .set('auth', userOneToken)
+            .send({
+                title: "lasagna dinner",
+                message: "Hope this fills your belly"
+            })
+            .expect(200)
+            .end(done);            
+    });
+    // test 2. should not create sticky with bad token
+    it('should not create sticky with bad token', function(done) {
+        request(app)
+            .post('/api/sticky')
+            .set('auth', 'a9sugpqokw8e902jejmklasjdfa')
+            .send({
+                title: "lasagna dinner",
+                message: "Hope this fills your belly"
+            })
+            .expect(401)
+            .end(done); 
+    })
+    // test 3. should not create sticky with invalid inputs
+    it ('should not create sticky with invalid input', function(done) {
+        request(app)
+            .post('/api/sticky')
+            .set('auth', userOneToken)
+            .send({
+                message: '',
+                title: ''
+            })
+            .expect(500)
+            .end(done);
+    });
+    // test 4. should not create sticky with missing inputs
+    it ('should not create sticky with missing input', function(done) {
+        request(app)
+            .post('/api/sticky')
+            .set('auth', userOneToken)
+            .send({})
+            .expect(501)
+            .end(done);
+    });
+    
+});
+
+describe('PATCH /sticky', () => {
+    // test 1, should update an existing sticky
+    it('should update existing sticky', function(done) {
+        request(app)
+            .patch('/api/sticky')
+            .set('auth', userOneToken)
+            .send({
+                id: firstStickyId,
+                title:"Pretzle with Cheese"
+            })
+            .expect(200)
+            .end(done);
+    });
+    // test 2. should not update sticky if invalid id is passed
+    it('should not update sticky if id is wrong', function(done) {
+        request(app)
+            .patch('/api/sticky')
+            .set('auth', userOneToken)
+            .send({
+                id: '23945',
+                title: "Omelet"
+            })
+            .expect(501)
+            .end(done);
+    });
+    // test 3. should not update sticky if patch data is invalid
+    it('should not update sticky if patch data is invalid', function(done) {
+        request(app)
+            .patch('/api/sticky')
+            .set('auth', userOneToken)
+            .send({
+                id: firstStickyId
+            })
+            .expect(501)
+            .end(done);
+    });
+
+});
+
+describe('DELETE /sticky', () => {
+    // test 1. It should delete sticky if valid id 
+    it('should delete sticky if valid id', function(done) {
+        request(app)
+            .delete('/api/sticky/'+firstStickyId)
+            .set('auth', userOneToken)
+            .expect(200)
+            .end( (err, res) => {
+                if (err) return done(err);
+    
+                Sticky.findById(firstStickyId)
+                    .then( sticky => {
+                        expect(sticky).toBeFalsy();
+                        done();
+                    })
+                    .catch( e => {
+                        done(e);
+                    });
+            });
+    })
+
+    // test 2. It should not delete sticky if invalid id
+    it('should not delete sticky if invalid id', function(done) {
+        request(app)
+            .delete('/api/sticky/1234weuojpwe')
+            .set('auth', userOneToken)
+            .expect(500)
+            .end(done);
+    })
 });
