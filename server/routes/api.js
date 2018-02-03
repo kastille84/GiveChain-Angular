@@ -70,6 +70,9 @@ router.post('/register',[
         check("name")
             .exists()
             .trim(),
+        check("url")
+            .exists()
+            .trim(),
         check("address")
             .exists()
             .trim(),
@@ -92,7 +95,7 @@ router.post('/register',[
         const result = validationResult(req);
         if (!result.isEmpty()) {
             // there are validation errors               
-            return res.status(400).json({errors: result});
+            return res.status(400).json({errors: "something went wrong"});
         }
         // hash password before saving
         const salt = bcrypt.genSaltSync(10);
@@ -102,6 +105,7 @@ router.post('/register',[
             "email": req.body.email,
             "password": hash,
             "name": req.body.name,
+            "url": req.body.url,
             "address": req.body.address,
             "city": req.body.city,
             "state": req.body.state,

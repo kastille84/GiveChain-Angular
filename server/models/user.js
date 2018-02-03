@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const schema = new Schema({
     username: { 
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     email: {
         type: String,
@@ -16,11 +17,30 @@ const schema = new Schema({
         type: String,
         required: true
     },
-    name: String,
-    address: String,
-    city: String,
-    state: String,
-    zipcode: String,
+    name: {
+        type: String,
+        required: true
+    },
+    url: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    zipcode: {
+        type: String,
+        required: true
+    },
     phone: String,
     stickies: [{
         type: mongoose.Schema.Types.ObjectId,

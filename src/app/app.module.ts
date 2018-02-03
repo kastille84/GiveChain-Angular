@@ -1,6 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
 
 // Routes from app.routing.ts
 import { routing } from './app.routing';
@@ -13,6 +16,10 @@ import { NavComponent } from './nav/nav.component';
 import { SearchComponent } from './home/search/search.component';
 import { BulletinBoardComponent } from './home/bulletin-board/bulletin-board.component';
 import { FooterComponent } from './footer/footer.component';
+import { RegisterComponent } from './home/register/register.component';
+
+// services
+import { UserService } from './services/user.service';
 
 
 @NgModule({
@@ -23,14 +30,18 @@ import { FooterComponent } from './footer/footer.component';
     NavComponent,
     SearchComponent,
     BulletinBoardComponent,
-    FooterComponent
+    FooterComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     RouterModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     routing
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
