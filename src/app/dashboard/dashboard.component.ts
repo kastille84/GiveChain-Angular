@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
+    //this.flashMessagesService.show('You Successfully Logged In', {cssClass: 'alert-success'});
   }
 
 }

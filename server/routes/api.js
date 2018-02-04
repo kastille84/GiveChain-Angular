@@ -148,11 +148,14 @@ router.post('/login', [
                 if (same) {
                     // passwords match
                         // create token
-                        const token = jwt.sign({id: user._id, access: 'auth'}, tks, {expiresIn: 7200});
+                        const token = jwt.sign({id: user._id, access: 'auth'}, tks, {expiresIn: '2h'});
+                        //const decoded = jwt.decode(token, {complete: true});
+                       
                         // send  token & "success" message to front end
                         return res.status(200).json({
                             message: 'Auth Success',
-                            token: token
+                            token: token,
+                            expiresAt: new Date().getTime() + 7200000
                         });
                 }
 

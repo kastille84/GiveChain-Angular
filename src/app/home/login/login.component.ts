@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from './../../services/user.service';
+import { FlashMessagesService } from 'angular2-flash-messages/module/flash-messages.service';
 
 @Component({
   selector: 'app-login',
@@ -13,9 +14,10 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(
-        private userService: UserService, 
+        private userService: UserService,
         private router: Router,
-        private route: ActivatedRoute) { }
+        private route: ActivatedRoute,
+        private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
     // create the form
@@ -32,9 +34,16 @@ export class LoginComponent implements OnInit {
            (data) => {
              // im logged in .. AND Getting token
              localStorage.setItem('token', data['token']);
+             localStorage.setItem('expiresAt', data['expiresAt']);
 
              // redirect to DASHBOARD
             this.router.navigate(['/dashboard']);
+           },
+           (err) => {
+            this.flashMessagesService
+                  .show('Incorrect Username/Password. Try Again.', 
+                        {cssClass: 'alert alert-danger', timeout: 3500}
+                  );
            }
         );
   }

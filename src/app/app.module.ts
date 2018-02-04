@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { FlashMessagesModule } from 'angular2-flash-messages';
 
 // Routes from app.routing.ts
 import { routing } from './app.routing';
@@ -20,6 +20,8 @@ import { RegisterComponent } from './home/register/register.component';
 
 // services
 import { UserService } from './services/user.service';
+import { LoginComponent } from './home/login/login.component';
+import { AuthGuard } from './services/auth-guard.service';
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { UserService } from './services/user.service';
     SearchComponent,
     BulletinBoardComponent,
     FooterComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -39,9 +42,13 @@ import { UserService } from './services/user.service';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    FlashMessagesModule.forRoot(),
     routing
   ],
-  providers: [UserService],
+  providers: [
+      UserService,
+      AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
