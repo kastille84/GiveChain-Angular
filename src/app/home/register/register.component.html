@@ -2,8 +2,13 @@
   <h1>Register</h1>
   <small>Already Registered? login</small>
   <hr>
+  <flash-messages></flash-messages>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
     <div class="form-group">
+      <div class="alert alert-danger" 
+          *ngIf="registerForm.controls['username'].errors && !registerForm.controls['username'].untouched">
+        <div [hidden]="!registerForm.controls['username'].errors.required">Username is required.</div>
+      </div>
       <label for="username">Username</label>
       <input 
           type="text" 
@@ -13,6 +18,11 @@
           placeholder="username" >
     </div>
     <div class="form-group">
+      <div class="alert alert-danger" 
+          *ngIf="registerForm.controls['email'].errors && !registerForm.controls['email'].untouched">
+        <div [hidden]="!registerForm.controls['email'].errors.required">Email is required.</div>
+        <div [hidden]="!registerForm.controls['email'].errors.email">Not in Email format</div>
+      </div>
       <label for="email">Email</label>
       <input 
           type="email" 
@@ -22,6 +32,10 @@
           placeholder="email" >
     </div>
     <div class="form-group">
+      <div class="alert alert-danger" 
+          *ngIf="registerForm.controls['password'].errors && !registerForm.controls['password'].untouched">
+        <div [hidden]="!registerForm.controls['password'].errors.required">Password is required.</div>
+      </div>
       <label for="password">Password</label>
       <input 
           type="password" 
@@ -31,6 +45,10 @@
           placeholder="password" >
     </div>
     <div class="form-group">
+      <div class="alert alert-danger" 
+          *ngIf="registerForm.controls['name'].errors && !registerForm.controls['name'].untouched">
+        <div [hidden]="!registerForm.controls['name'].errors.required">Restaurant Name is required.</div>
+      </div>
       <label for="name">Restaurant Name</label>
       <input 
           type="text" 
@@ -39,21 +57,11 @@
           formControlName="name"
           placeholder="Restaurant Name" >
     </div>
-    <!-- <div class="form-group">
-      <label for="url">Restaurant Url <br> <small class="form-text text-muted">A link that will take patrons to your list of available food items</small></label>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">https://www.givechain.us/</span>
-        </div>
-        <input 
-            type="text" 
-            id="url"
-            class="form-control form-contol-sm"
-            formControlName="url"
-            placeholder="RosasPizza123" >
-      </div>
-    </div> -->
     <div class="form-group">
+        <div class="alert alert-danger" 
+          *ngIf="registerForm.controls['url'].errors && !registerForm.controls['url'].untouched">
+        <div [hidden]="!registerForm.controls['url'].errors.required">Restaurant Url is required.</div>
+      </div>
         <label for="url">Restaurant Url <br> <small class="form-text text-muted">A link that will take patrons to your list of available food items</small></label>
         <input 
               type="text" 
@@ -64,6 +72,10 @@
         
     </div>
     <div class="form-group">
+        <div class="alert alert-danger" 
+          *ngIf="registerForm.controls['address'].errors && !registerForm.controls['address'].untouched">
+        <div [hidden]="!registerForm.controls['address'].errors.required">Address is required.</div>
+      </div>
       <label for="address">Address</label>
       <input 
           type="text" 

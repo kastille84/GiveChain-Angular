@@ -167,7 +167,7 @@ router.post('/login', [
         })
         .catch(e=> {
             // username doens't exist
-            res.status(500).json({errors:e});
+            res.status(500).json({error: 'fail'});
         });
 });
 

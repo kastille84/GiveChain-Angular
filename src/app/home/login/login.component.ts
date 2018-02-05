@@ -28,24 +28,29 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.login(
-        this.loginForm.value.username, 
-        this.loginForm.value.password).subscribe(
-           (data) => {
-             // im logged in .. AND Getting token
-             localStorage.setItem('token', data['token']);
-             localStorage.setItem('expiresAt', data['expiresAt']);
-
-             // redirect to DASHBOARD
-            this.router.navigate(['/dashboard']);
-           },
-           (err) => {
-            this.flashMessagesService
-                  .show('Incorrect Username/Password. Try Again.', 
-                        {cssClass: 'alert alert-danger', timeout: 3500}
-                  );
-           }
-        );
+    // if validation errors, then DONTS SUBMIT
+    if (this.loginForm.status === 'VALID'){
+        this.userService.login(
+            this.loginForm.value.username, 
+            this.loginForm.value.password)
+            .subscribe(
+              (data) => {
+                // im logged in .. AND Getting token
+                localStorage.setItem('token', data['token']);
+                localStorage.setItem('expiresAt', data['expiresAt']);
+    
+                // redirect to DASHBOARD
+                this.router.navigate(['/dashboard']);
+              },
+              (err) => {
+                this.flashMessagesService
+                      .show('Incorrect Username/Password. Try Again.', 
+                            {cssClass: 'alert alert-danger', timeout: 3500}
+                      );
+              }
+            );
+    }
+    
   }
 
 }
