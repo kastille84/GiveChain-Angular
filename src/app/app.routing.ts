@@ -15,3 +15,4 @@ const appRoutes: Routes = [
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);
+export const routes = appRoutes;

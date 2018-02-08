@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
       private route: ActivatedRoute,
       private flashMessagesService: FlashMessagesService) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.registerForm = new FormGroup({
         'username': new FormControl(null, Validators.required),
         'email': new FormControl(null, [
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    // #TODO - validation - this.registerForm.
+    
       if (this.registerForm.status === 'VALID') {
         const newUser = new User(
           this.registerForm.value.username,
