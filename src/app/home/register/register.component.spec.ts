@@ -3,23 +3,33 @@ import { FormGroup, FormControl, ReactiveFormsModule, FormsModule } from '@angul
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { By } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/from';
 
 import { RegisterComponent } from './register.component';
 import { UserService } from './../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { FILE } from 'dns';
+import { User } from './../../models/user.model';
 
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let de: DebugElement;
+  let service;
 
-  class UserServiceStub extends UserService {
+  class UserServiceStub {
+      register() {
+        return Observable;
+      }
 
   }
   class RouterStub {
+
+    navigate(url) {
+      return url;
+    }
   }
   class ActivatedRouteStub {
   }
@@ -32,10 +42,10 @@ describe('RegisterComponent', () => {
       declarations: [ RegisterComponent ],
       schemas: [ CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        {provide: UserService, userClass: UserServiceStub},
-        {provide: Router, userClass: RouterStub},
-        {provide: ActivatedRoute, userClass: ActivatedRouteStub},
-        {provide: FlashMessagesService, userClass: FlashMessagesServiceStub},
+        {provide: UserService, useClass: UserServiceStub},
+        {provide: Router, useClass: RouterStub},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: FlashMessagesService, useClass: FlashMessagesServiceStub},
       
       ]
     })
@@ -46,6 +56,7 @@ describe('RegisterComponent', () => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     de = fixture.debugElement;
+    
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -85,7 +96,26 @@ describe('RegisterComponent', () => {
       expect(component.registerForm.controls['state'].status).toBe('INVALID');
     });
 
-  })
+  });
 
+  it('should call register method on UserService when form is VALID', () => {
+    service = TestBed.get(UserService);
+    let spy = spyOn(service, 'register').and.returnValue(Observable.empty());
 
+    component.registerForm.controls['username'].setValue('testname');
+    component.registerForm.controls['email'].setValue('testemail@gmail.com');
+    component.registerForm.controls['password'].setValue('testname345');
+    component.registerForm.controls['name'].setValue('testname');
+    component.registerForm.controls['url'].setValue('testurl');
+    component.registerForm.controls['address'].setValue('125 Address st');
+    component.registerForm.controls['city'].setValue('testcity');
+    component.registerForm.controls['state'].setValue('NY');
+    component.registerForm.controls['zipcode'].setValue('12550');
+    component.registerForm.controls['phone'].setValue('8454013350');
+    
+    fixture.detectChanges();  
+    component.onSubmit();
+
+    expect(spy).toHaveBeenCalled();
+  });
 });

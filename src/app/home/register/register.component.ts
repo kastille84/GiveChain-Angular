@@ -62,7 +62,6 @@ export class RegisterComponent implements OnInit {
                this.router.navigate(['/login']);
               },
               (errResp) => {
-                console.log(errResp.error.errors.code);
                 if (errResp.error.errors.code === 11000) {
                   this.flashMessagesService
                       .show('Username and/or Email Already Exist.', 
@@ -71,7 +70,7 @@ export class RegisterComponent implements OnInit {
               }
         );        
       }
-
+      
   }
 
 }

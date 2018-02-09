@@ -21,7 +21,7 @@ export class UserService {
         if (!expiresAt 
             || +expiresAt < new Date().getTime()) {
                 return false;
-            };
+        }
         return true;
     }
 

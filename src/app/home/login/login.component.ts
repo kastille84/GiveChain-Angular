@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    // if validation errors, then DONTS SUBMIT
+    // if NO validation errors, then SUBMIT
     if (this.loginForm.status === 'VALID'){
         this.userService.login(
             this.loginForm.value.username, 
