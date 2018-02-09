@@ -6,10 +6,12 @@ const {check, validationResult} = require('express-validator/check');
 const async = require('async');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const randomString = require('random-string');
+const nodemailer = require('nodemailer');
 
 const User = require('../models/user');
 const Sticky = require('../models/sticky');
-const {tks} = require('../config/config');
+const {tks, email, pemail, urlEnv} = require('../config/config');
 
 mongoose.connect('mongodb://localhost:27017/givechain');
 mongoose.Promise= global.Promise;
@@ -100,6 +102,7 @@ router.post('/register',[
         // hash password before saving
         const salt = bcrypt.genSaltSync(10);
         var hash = bcrypt.hashSync(req.body.password, salt);
+        const vhash = randomString({length:20});
         const restaurant = new User({
             "username": req.body.username,
             "email": req.body.email,
@@ -110,13 +113,61 @@ router.post('/register',[
             "city": req.body.city,
             "state": req.body.state,
             "zipcode": req.body.zipcode,
-            "phone": req.body.phone
+            "phone": req.body.phone,
+            "verifyHash": vhash,
+            "verified" : false
         });
         restaurant.save((err, result) => {
             if (err) {
                 return res.status(500).json({errors: err});
             }
-            return res.status(200).json({restaurant: result});
+            // NODE MAILER
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                host: 'smtp.gmail.com',
+                auth: {
+                    user: email,
+                    pass: pemail
+                }
+            });
+            // setting up the data to send off
+            //#TODO - change localhost url in html to reflect production email
+            const mailOptions = {
+                from: `"Edwin at GiveChain" <${email}> `,
+                to: req.body.email,
+                subject: "GiveChain Needs Email Verification",
+                html: "<h2>Hey " + req.body.name + "</h2><h3>Thank you for registering to GiveChain</h3><p>For sercurity reasons, we need to verify that you are the person/entitfy that just registered with us. </p><p>Please click on the link below to complete verification</p><br><a href='" + urlEnv+"api/register/" + result._id+"/" + vhash + "'>VERIFY HERE</a>"
+            };
+            // send mail
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) return console.log("nodemailer", err);
+                
+                return res.status(200).json({
+                    restaurant: result,
+                    verified: false
+                }); 
+            });
+
+        });
+
+});
+
+router.get('/register/:id/:hash', (req, res) => {
+    // grab the params
+    const id= req.params['id'];
+    const hash = req.params['hash'];
+
+    // query the USER collection for an id
+    User.findByIdAndUpdate(id, {
+        verified: true
+    }).exec()
+        .then(user => {
+            //res.status(200).json({verified: true});
+            // redirect
+            res.redirect(200, urlEnv+'login');
+        })
+        .catch(err => {
+            res.status(500).json({error: 'could not verify'});
         });
 
 });
@@ -139,7 +190,12 @@ router.post('/login', [
     
     // check username, password credentials
     User.findOne({username: req.body.username}).exec()
-        .then(user => {        
+        .then(user => {      
+            // user hasn't been verified.. don't go any further
+            if (user.verified === false) {
+                return res.status(500).json({verify: false});
+            }  
+            // verified at this point
             bcrypt.compare(req.body.password, user.password, (err, same) => {
                 if (err) {
                     return res.status(500).json({errors: err});

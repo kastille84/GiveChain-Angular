@@ -38,14 +38,22 @@ export class LoginComponent implements OnInit {
                 // im logged in .. AND Getting token
                 localStorage.setItem('token', data['token']);
                 localStorage.setItem('expiresAt', data['expiresAt']);
-    
+                localStorage.setItem('verified', 'true');
                 // redirect to DASHBOARD
                 this.router.navigate(['/dashboard']);
               },
               (err) => {
+                if (err.error.verify === false) {
+                  this.flashMessagesService
+                        .show('Cannot Log In Yet. You received an Email to verify yourself. Visit email and follow instructions.', 
+                              {cssClass: 'alert alert-warning', timeout: 7000}
+                        );
+                        return;
+                }
+
                 this.flashMessagesService
                       .show('Incorrect Username/Password. Try Again.', 
-                            {cssClass: 'alert alert-danger', timeout: 3500}
+                            {cssClass: 'alert alert-danger', timeout: 5000}
                       );
               }
             );

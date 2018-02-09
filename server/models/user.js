@@ -45,7 +45,12 @@ const schema = new Schema({
     stickies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Sticky"        
-    }]
+    }],
+    verifyHash: String,
+    verified: {
+        type: Boolean,
+        default: false
+    }
 });
 
 module.exports = mongoose.model("User", schema);
