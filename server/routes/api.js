@@ -162,8 +162,6 @@ router.get('/register/:id/:hash', (req, res) => {
         verified: true
     }).exec()
         .then(user => {
-            //res.status(200).json({verified: true});
-            // redirect
             res.redirect(200, urlEnv+'login');
         })
         .catch(err => {

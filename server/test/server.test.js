@@ -61,15 +61,16 @@ describe('GET /sticky', function() {
 describe('POST /register', function() {
 
     // test 1, should create user
-    it('should create user', function(done) {
+    it('should create user AND send verification email', function(done) {
         request(app)
             .post('/api/register')
             .send({
                 //_id: new ObjectID(),
                 username: "hoagie84",
                 email: "hoagie84@gmail.com",
-                password: 'ha2vu486',
+                password: 'test4400',
                 name: "Hoagie's Pizza",
+                url: "HoagiesPizza123",
                 address: "75 Liberty st. w.h.",
                 city: "Newburgh",
                 state: "NY",
@@ -87,8 +88,9 @@ describe('POST /register', function() {
             .send({
                 username: "kastille84", // already exists
                 email: "hooligan84@gmail.com",
-                password: 'ha2vu486',
+                password: 'test4400',
                 name: "Hooligan Pizza",
+                url: "HooligansPizza123",
                 address: "75 Liberty st. w.h.",
                 city: "Newburgh",
                 state: "NY",
@@ -105,8 +107,9 @@ describe('POST /register', function() {
             .send({
                 username: "hoagie84", 
                 email: "kastille84@gmail.com", // already exists
-                password: 'ha2vu486',
+                password: 'test4400',
                 name: "Hooligan Pizza",
+                url: "HooligansPizza123",
                 address: "75 Liberty st. w.h.",
                 city: "Newburgh",
                 state: "NY",
@@ -137,6 +140,23 @@ describe('POST /register', function() {
 
 });
 
+describe('GET /register/id/hash', () => {
+    it('should get 500 code if id param does NOT exist', function(done) {
+        request(app)
+            .get('/api/register/123/567')
+            .expect(500)
+            .end(done);
+        });
+        
+        it('should get 200 code if id param does exist', function(done) {
+            request(app)
+                .get('/api/register/'+users[0]._id+'/567')
+                .expect(200)
+                .end(done);
+    });
+
+});
+
 describe('POST /login', () => {
 
     // test 1. Should log in user with right credendtials
@@ -145,7 +165,7 @@ describe('POST /login', () => {
             .post('/api/login')
             .send({
                 username: 'kastille84',
-                password: 'ha2vu486'
+                password: 'test4400'
             })
             .expect(200)
             .end(done);
@@ -180,6 +200,18 @@ describe('POST /login', () => {
             .expect(500)
             .end(done);
     });
+
+    it('should not login user if NOT verified', function(done) {
+        request(app)
+            .post('/api/login')
+            .send({
+                username: 'doogard84',
+                password: 'test4400'
+            })
+            .expect(500)
+            .end(done);
+    });
+
 });
 
 describe("POST /sticky", () => {

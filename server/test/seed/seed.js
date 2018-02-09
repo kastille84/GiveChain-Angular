@@ -9,7 +9,7 @@ const {tks} = require('./../../config/config');
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
 const salt = bcrypt.genSaltSync(10);
-const password = bcrypt.hashSync("ha2vu486", salt);
+const password = bcrypt.hashSync("test4400", salt);
 const userOneToken = jwt.sign({id: userOneId}, tks).toString();
 const userTwoToken = jwt.sign({id: userTwoId}, tks).toString();
 
@@ -21,11 +21,13 @@ const users = [
         email: "kastille84@gmail.com",
         password: password,
         name: "Rosa's Pizza",
+        url: 'RosasPizza123',
         address: "75 Liberty st. w.h.",
         city: "Newburgh",
         state: "NY",
         zipcode: "12550",
-        phone: "8454013350"
+        phone: "8454013350",
+        verified: true
     }, 
     {
         _id: userTwoId,
@@ -33,11 +35,13 @@ const users = [
         email: "doogard84@gmail.com",
         password: password,
         name: "Doogard's Pizza'",
+        url: "DoogardsPizza123",
         address: "75 Liberty st. w.h.",
         city: "Newburgh",
         state: "NY",
         zipcode: "12550",
-        phone: "8454013350"
+        phone: "8454013350",
+        verified: false
     }
 ];
 
