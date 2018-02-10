@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 
@@ -7,6 +7,9 @@ import { User } from '../models/user.model';
 @Injectable()
 export class UserService {
     url = 'http://localhost:3000/api/';
+    //@Output() loggedIn = new EventEmitter<boolean>();
+    loggedInStatus = false;
+    @Output() loggedInEvent = new EventEmitter<boolean>();
 
     constructor(private http: HttpClient) {}
 
@@ -25,6 +28,20 @@ export class UserService {
         return true;
     }
 
+    setLoggedIn() {
+        this.loggedInStatus = true;
+        this.loggedInEvent.emit(this.loggedInStatus);
+    }
+
+    setLogout() {
+        // remove localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('expiresAt');
+        localStorage.removeItem('verified');
+
+        this.loggedInStatus = false;
+        this.loggedInEvent.emit(this.loggedInStatus);
+    }
     // register user
     register(user: User) {
         const httpOptions = {

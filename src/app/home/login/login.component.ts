@@ -39,6 +39,10 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('token', data['token']);
                 localStorage.setItem('expiresAt', data['expiresAt']);
                 localStorage.setItem('verified', 'true');
+
+                //user userService to hold a login status
+                this.userService.setLoggedIn();
+
                 // redirect to DASHBOARD
                 this.router.navigate(['/dashboard']);
               },
