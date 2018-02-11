@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const randomString = require('random-string');
 const nodemailer = require('nodemailer');
+const __ = require('lodash');
 
 const User = require('../models/user');
 const Sticky = require('../models/sticky');
@@ -101,17 +102,17 @@ router.post('/register',[
         }
         // hash password before saving
         const salt = bcrypt.genSaltSync(10);
-        var hash = bcrypt.hashSync(req.body.password, salt);
+        var hash = bcrypt.hashSync( (req.body.password).toLowerCase(), salt);
         const vhash = randomString({length:20});
         const restaurant = new User({
-            "username": req.body.username,
-            "email": req.body.email,
+            "username": (req.body.username).toLowerCase(),
+            "email": (req.body.email).toLowerCase(),
             "password": hash,
             "name": req.body.name,
-            "url": req.body.url,
+            "url": (req.body.url).toLowerCase(),
             "address": req.body.address,
-            "city": req.body.city,
-            "state": req.body.state,
+            "city": (req.body.city).toLowerCase(),
+            "state": (req.body.state).toLowerCase(),
             "zipcode": req.body.zipcode,
             "phone": req.body.phone,
             "verifyHash": vhash,
@@ -187,14 +188,14 @@ router.post('/login', [
     }
     
     // check username, password credentials
-    User.findOne({username: req.body.username}).exec()
+    User.findOne({username: (req.body.username).toLowerCase()}).exec()
         .then(user => {      
             // user hasn't been verified.. don't go any further
             if (user.verified === false) {
                 return res.status(500).json({verify: false});
             }  
             // verified at this point
-            bcrypt.compare(req.body.password, user.password, (err, same) => {
+            bcrypt.compare((req.body.password).toLowerCase(), user.password, (err, same) => {
                 if (err) {
                     return res.status(500).json({errors: err});
                 }
@@ -225,44 +226,75 @@ router.post('/login', [
         });
 });
 
-    // Get All Stickies
+    // Get All Stickies - by setting city/state in Local Storage OR restaurant URL
 router.get('/sticky', (req, res) => {
     // ?city=newburgh&state=ny
-    const city = req.query.city;
-    const state = req.query.state
-
-    if (!city || ! state) {
-        return res.status(500).json({error: "Missing City and/or State"});
-    }
+    const city = req.query.city? (req.query.city).toLowerCase() : null;
+    const state = req.query.state? (req.query.state).toLowerCase() : null;
+    // ?restaurant=rosaspiza
+    const restaurant = req.query.restaurant? (req.query.restaurant).toLowerCase() : null;
     // get all stickies
     let stickyArray = [];
-    
-    Sticky.find({}).populate("restaurant").exec()
-        .then( 
-            (stickies) => {
-                for(sticky of stickies) {
-                    if ( (sticky.restaurant.city).toLowerCase() == city.toLowerCase() &&
-                        (sticky.restaurant.state).toLowerCase() == state.toLowerCase()) {
-                            stickyArray.push(sticky);
+
+    if (city && state) {
+        if(!restaurant) {        
+            User.find({city: city, state: state}).populate('stickies').exec()
+                .then( users => {
+                    if (users.length === 0) {                       
+                         // doesn't match city and or state
+                         return res.status(404).json({error: "Incorrect City/State Combination"});                             
                     }
-                }
-                if (stickyArray.length == 0) {
+
+                    let tempArray = [];
+                         //loop through each user and dump their stickies into stickyArray
+                         for (let i = 0; i < users.length; i++) {
+                             for(let g = 0; g < users[i].stickies.length;g++) {
+                                 tempArray.push(users[i].stickies[g]);            
+                             }
+                         }
+                         // randomize the entries
+                         stickyArray = __.shuffle(tempArray);
+                         
+                         return res.status(200).json({
+                             stickyArray,
+                             message: "Got All Stickies"
+                             });
+                });
+        } else if (restaurant) {
+        // they have a restaurant url
+        User.find().where({city: city, state: state, url: restaurant}).populate('stickies').exec()
+            .then( users => {
+                if (users.length === 0) {                       
                     // doesn't match city and or state
-                    return res.status(404).json({error: "Incorrect City/State Combination"});         
-
+                    return res.status(404).json({error: "Incorrect City/State or Restaurant Combination"});                             
                 }
-                return res.status(200).json({
-                    stickyArray,
-                    message: "Got All Stickies"
-                    });
-                           
-            }
-        );
-
-    
+                let tempArray = [];
+                    //loop through each user and dump their stickies into stickyArray
+                    for (let i = 0; i < users.length; i++) {
+                        for(let g = 0; g < users[i].stickies.length;g++) {
+                            tempArray.push(users[i].stickies[g]);
+                        }
+                    }
+                    // randomize the entries
+                    stickyArray = __.shuffle(tempArray);
+                    
+                    return res.status(200).json({
+                        stickyArray,
+                        message: "Got All Stickies"
+                        });
+            });
+        }
+    } else {
+        return res.status(500).json({error: 'Invalid or Missing query params'});
+    }    
 });
 
-// #TODO - protect these routes below using jwt
+    // #TODO - SEARCH ROUTE to get All Stickies by Search Criteria
+
+// Routes below protected using jwt
+
+    // #TODO - Get All Stickies by ID
+
 
     // Create Sticky
 router.post('/sticky', authenticate, [
@@ -291,16 +323,21 @@ router.post('/sticky', authenticate, [
         const id = req.decoded.id;
             // currently we are just grabbing the 1st user on the collection
         // #TODO - currently saved sticky must be associated with user        
-        User.findOne({_id: id}).then((doc) => {            
+        User.findOne({_id: id}).then((doc) => {     
             const sticky = new Sticky({
                 "title": req.body.title,
                 "message": req.body.message,
-                "restaurant": doc._id
+                "from": req.body.from,
+                "user": doc._id
             });
             sticky.save((err, result) => {
                 if (err) {
                     return res.status(500).json({error: "Somethingo went wrong"});
                 }
+                // save/push  sticky_id into user array
+                doc.stickies.push(result._id);
+                doc.save();
+
                 return res.status(200).json({
                         restaurant: result,
                         message: "Sticky Added Successfully"

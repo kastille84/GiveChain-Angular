@@ -44,7 +44,7 @@ const schema = new Schema({
     phone: String,
     stickies: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Sticky"        
+        ref: 'Sticky'        
     }],
     verifyHash: String,
     verified: {

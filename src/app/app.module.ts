@@ -22,6 +22,7 @@ import { RegisterComponent } from './home/register/register.component';
 import { UserService } from './services/user.service';
 import { LoginComponent } from './home/login/login.component';
 import { AuthGuard } from './services/auth-guard.service';
+import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { AuthGuard } from './services/auth-guard.service';
     BulletinBoardComponent,
     FooterComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    StickiesListComponent
   ],
   imports: [
     BrowserModule,

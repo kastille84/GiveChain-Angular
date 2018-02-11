@@ -14,11 +14,11 @@ const schema = mongoose.Schema({
         type: String,
         default: "Anonymous"
     },
-    restaurant: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
-},
+}, 
 {
     timestamps: { createdAt: 'created_at'}
 }
