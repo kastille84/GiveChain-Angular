@@ -20,6 +20,7 @@ import { RegisterComponent } from './home/register/register.component';
 
 // services
 import { UserService } from './services/user.service';
+import { StickyService } from './services/sticky.service';
 import { LoginComponent } from './home/login/login.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.component';
@@ -49,6 +50,7 @@ import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.c
   ],
   providers: [
       UserService,
+      StickyService,
       AuthGuard
   ],
   bootstrap: [AppComponent]

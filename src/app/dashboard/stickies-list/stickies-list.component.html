@@ -1,3 +1,22 @@
-<p>
-  stickies-list works!
-</p>
+<h1>List of Sticky Notes</h1>
+<article 
+  class="sticky card text-center m-4"
+  *ngFor="let sticky of stickies">
+  <div class="card-body">
+    <h5 class="card-title">{{sticky.title}}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{sticky.user.name}}</h6>
+    <p class="card-text">{{sticky.message}} <br> <small class="text-muted " >from {{sticky.from}}</small></p>
+    <hr>
+    <small class="card-text text-muted">{{sticky.user.address}}<br> {{sticky.user.city}}, {{sticky.user.state}}</small>
+  </div>
+  <div class="card-footer">
+    <!-- Either Reserve or Edit/Delete -->
+    <div *ngIf="isLoggedIn">
+        <a class="btn btn-info text-white">Edit</a> 
+        <button class="btn btn-danger">Delete</button>
+    </div>
+    <div *ngIf="!isLoggedIn">
+        im logged out
+    </div>
+  </div>
+</article>

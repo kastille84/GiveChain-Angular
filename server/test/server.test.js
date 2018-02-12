@@ -62,6 +62,7 @@ describe('POST /register', function() {
 
     // test 1, should create user
     it('should create user AND send verification email', function(done) {
+        this.timeout(5000);
         request(app)
             .post('/api/register')
             .send({
@@ -72,8 +73,8 @@ describe('POST /register', function() {
                 name: "Hoagie's Pizza",
                 url: "HoagiesPizza123",
                 address: "75 Liberty st. w.h.",
-                city: "Newburgh",
-                state: "NY",
+                city: "newburgh",
+                state: "ny",
                 zipcode: "12550",
                 phone: "8454013350"
             })

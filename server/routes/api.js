@@ -210,7 +210,10 @@ router.post('/login', [
                         return res.status(200).json({
                             message: 'Auth Success',
                             token: token,
-                            expiresAt: new Date().getTime() + 7200000
+                            expiresAt: new Date().getTime() + 7200000,
+                            city: user.city,
+                            state: user.state,
+                            url: user.url
                         });
                 }
 
@@ -237,64 +240,41 @@ router.get('/sticky', (req, res) => {
     let stickyArray = [];
 
     if (city && state) {
+        let promise = null;
         if(!restaurant) {        
-            User.find({city: city, state: state}).populate('stickies').exec()
-                .then( users => {
-                    if (users.length === 0) {                       
-                         // doesn't match city and or state
-                         return res.status(404).json({error: "Incorrect City/State Combination"});                             
-                    }
-
-                    let tempArray = [];
-                         //loop through each user and dump their stickies into stickyArray
-                         for (let i = 0; i < users.length; i++) {
-                             for(let g = 0; g < users[i].stickies.length;g++) {
-                                 tempArray.push(users[i].stickies[g]);            
-                             }
-                         }
-                         // randomize the entries
-                         stickyArray = __.shuffle(tempArray);
-                         
-                         return res.status(200).json({
-                             stickyArray,
-                             message: "Got All Stickies"
-                             });
-                });
-        } else if (restaurant) {
-        // they have a restaurant url
-        User.find().where({city: city, state: state, url: restaurant}).populate('stickies').exec()
-            .then( users => {
-                if (users.length === 0) {                       
+            promise = User.find({city: city, state: state}).populate('stickies').exec();
+        }
+        else if (restaurant) {
+            promise = User.find({city: city, state: state, url: restaurant}).populate('stickies').exec();
+        } 
+        promise.then( users => { 
+            if (users.length === 0) {                       
                     // doesn't match city and or state
-                    return res.status(404).json({error: "Incorrect City/State or Restaurant Combination"});                             
-                }
-                let tempArray = [];
-                    //loop through each user and dump their stickies into stickyArray
-                    for (let i = 0; i < users.length; i++) {
-                        for(let g = 0; g < users[i].stickies.length;g++) {
-                            tempArray.push(users[i].stickies[g]);
-                        }
-                    }
-                    // randomize the entries
-                    stickyArray = __.shuffle(tempArray);
+                    return res.status(404).json({error: "Incorrect City/State Combination"});                             
+            }
+            // let tempArray = [];
+            //      //loop through each user and dump their stickies into stickyArray
+            //      for (let i = 0; i < users.length; i++) {
+            //          for(let g = 0; g < users[i].stickies.length;g++) {
+            //              tempArray.push(users[i].stickies[g]);            
+            //          }
+            //      }
+            //      // randomize the entries
+            //      stickyArray = __.shuffle(tempArray);
                     
                     return res.status(200).json({
-                        stickyArray,
-                        message: "Got All Stickies"
+                        users,
+                        message: "Got All Users and Their Stickies"
                         });
-            });
-        }
+        });      
     } else {
         return res.status(500).json({error: 'Invalid or Missing query params'});
-    }    
+    }   
 });
 
     // #TODO - SEARCH ROUTE to get All Stickies by Search Criteria
 
 // Routes below protected using jwt
-
-    // #TODO - Get All Stickies by ID
-
 
     // Create Sticky
 router.post('/sticky', authenticate, [

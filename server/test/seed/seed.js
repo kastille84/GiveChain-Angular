@@ -23,8 +23,8 @@ const users = [
         name: "Rosa's Pizza",
         url: 'RosasPizza123',
         address: "75 Liberty st. w.h.",
-        city: "Newburgh",
-        state: "NY",
+        city: "newburgh",
+        state: "ny",
         zipcode: "12550",
         phone: "8454013350",
         verified: true
@@ -37,8 +37,8 @@ const users = [
         name: "Doogard's Pizza'",
         url: "DoogardsPizza123",
         address: "75 Liberty st. w.h.",
-        city: "Newburgh",
-        state: "NY",
+        city: "newburgh",
+        state: "ny",
         zipcode: "12550",
         phone: "8454013350",
         verified: false

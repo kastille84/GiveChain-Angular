@@ -38,6 +38,9 @@ export class LoginComponent implements OnInit {
                 // im logged in .. AND Getting token
                 localStorage.setItem('token', data['token']);
                 localStorage.setItem('expiresAt', data['expiresAt']);
+                localStorage.setItem('city', data['city']);
+                localStorage.setItem('state', data['state']);
+                localStorage.setItem('url', data['url']);
                 localStorage.setItem('verified', 'true');
 
                 //user userService to hold a login status
