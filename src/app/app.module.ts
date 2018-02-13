@@ -24,6 +24,8 @@ import { StickyService } from './services/sticky.service';
 import { LoginComponent } from './home/login/login.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.component';
+import { StickiesReservedComponent } from './dashboard/stickies-reserved/stickies-reserved.component';
+import { StickiesRedeemedComponent } from './dashboard/stickies-redeemed/stickies-redeemed.component';
 
 
 @NgModule({
@@ -37,7 +39,9 @@ import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.c
     FooterComponent,
     RegisterComponent,
     LoginComponent,
-    StickiesListComponent
+    StickiesListComponent,
+    StickiesReservedComponent,
+    StickiesRedeemedComponent
   ],
   imports: [
     BrowserModule,

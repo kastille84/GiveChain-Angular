@@ -14,6 +14,23 @@ const schema = mongoose.Schema({
         type: String,
         default: "Anonymous"
     },
+    reserve: {
+        type: Boolean,
+        default: false
+    },
+    reservedBy: {
+        type: String
+    },
+    reservedDate: {
+        type: Date
+    },
+    redeemed: {
+        type: Boolean,
+        default: false
+    },
+    redeemedDate: {
+        type: Date
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

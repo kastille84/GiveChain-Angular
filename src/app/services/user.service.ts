@@ -23,6 +23,7 @@ export class UserService {
         const expiresAt = localStorage.getItem('expiresAt');
         if (!expiresAt 
             || +expiresAt < new Date().getTime()) {
+                this.setLogout();
                 return false;
         }
         return true;
@@ -38,6 +39,7 @@ export class UserService {
         localStorage.removeItem('token');
         localStorage.removeItem('expiresAt');
         localStorage.removeItem('verified');
+        localStorage.removeItem('url');
 
         this.loggedInStatus = false;
         this.loggedInEvent.emit(this.loggedInStatus);
