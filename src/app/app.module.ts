@@ -26,6 +26,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.component';
 import { StickiesReservedComponent } from './dashboard/stickies-reserved/stickies-reserved.component';
 import { StickiesRedeemedComponent } from './dashboard/stickies-redeemed/stickies-redeemed.component';
+import { StickyComponent } from './shared/sticky/sticky.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { StickiesRedeemedComponent } from './dashboard/stickies-redeemed/stickie
     LoginComponent,
     StickiesListComponent,
     StickiesReservedComponent,
-    StickiesRedeemedComponent
+    StickiesRedeemedComponent,
+    StickyComponent
   ],
   imports: [
     BrowserModule,

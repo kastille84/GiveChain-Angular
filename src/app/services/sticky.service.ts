@@ -45,5 +45,5 @@ export class StickyService {
   getStickies() {
     return this.stickies;
   }
-  
 
+}
