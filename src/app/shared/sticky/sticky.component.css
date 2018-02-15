@@ -1,5 +1,6 @@
 .sticky {
     width: 20%;
+    min-width: 314px;
     display: inline-block;
     height: 361px;
 }

@@ -1,5 +1,5 @@
 <!-- Default Mode -->
-<ng-template [ngIf]="!reserveMode">
+<ng-template [ngIf]="!reserveMode && !editMode">
   <article 
     class="sticky card text-center m-4 align-top"
     >
@@ -26,16 +26,16 @@
       <!-- Available -->
       <div *ngIf="isLoggedIn && cardType == 'available'">
           <button class="btn btn-success" (click)="onReserveShow()">Reserve</button>
-          <button class="btn btn-info">Edit</button> 
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-info" (click)="onEditShow()">Edit</button> 
+          <button class="btn btn-danger" (click)="onDeleteset()">Delete</button>
       </div>
       <!-- Reserved -->
       <div *ngIf="isLoggedIn && cardType == 'reserved'">
-          <button class="btn btn-success">Redeem</button>  
+          <button class="btn btn-success" (click)="onRedeemSet()">Redeem</button>  
       </div>
       <!-- Redeemed -->
       <div *ngIf="isLoggedIn && cardType == 'redeemed'">
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger" (click)="onDeleteSet()">Delete</button>
           <small class="text-muted">Keep a record of sticky before deleting it</small>    
       </div>
       <!-- L O G G E D  O U T-->
@@ -51,7 +51,7 @@
 <ng-template [ngIf]="reserveMode">
   <article 
     class="sticky card text-center m-4 align-top"
-    (mouseleave)="onReserveCancel()"
+    (mouseleave)="onReserveEditModeCancel()"
     >
     <div class="card-body">
       <h5 class="card-title">{{sticky.title}}</h5>
@@ -72,6 +72,43 @@
       </form>
       <small class="mt-4 text-muted">Once reserved, make your way to the restaurant. Expires in 2 days.
       </small>
+    </div>
+  </article>
+</ng-template>
+
+<!-- Edit Mode -->
+<ng-template [ngIf]="editMode">
+  <article 
+    class="sticky card text-center m-4 align-top"
+    (mouseleave)="onReserveEditModeCancel()"
+    >
+    <div class="card-body">
+      <form [formGroup]="editForm" (ngSubmit)="onEditSet()">
+        <div class="form-group" >
+          <input 
+            type="text" 
+            id="reserveControl"
+            class="form-control"
+            formControlName="title">
+        </div>
+        <div class="form-group" >
+          <label for="reserveControl">Message</label>
+          <textarea 
+            class="form-control"
+            rows="4"
+            maxlength="120"
+            formControlName="message"></textarea>
+        </div>
+        <div class="form-group" >
+          <label for="reserveControl">From</label>
+          <input 
+            type="text" 
+            id="reserveControl"
+            class="form-control"
+            formControlName="from">
+        </div>
+        <button class="btn btn-info">Edit Now</button>
+      </form>      
     </div>
   </article>
 </ng-template>

@@ -12,7 +12,10 @@ export class StickyComponent implements OnInit {
   @Input() sticky;
   isLoggedIn = false;
   reserveMode = false;
+  editMode = false;
+
   reserveForm: FormGroup;
+  editForm: FormGroup;
 
   constructor(private userService: UserService) { }
 
@@ -20,9 +23,10 @@ export class StickyComponent implements OnInit {
     // get Logged In status
     this.isLoggedIn = this.userService.isAuthenticated();
   }
-
+//  R E S E R V E 
   onReserveShow() {
     this.reserveMode = true;
+    this.editMode = false;
     // set up reactive Form
     this.reserveForm = new FormGroup({
       'reserveBy': new FormControl(null, Validators.required)
@@ -38,9 +42,39 @@ export class StickyComponent implements OnInit {
     // # TODO - set sticky.reserved to true & reservedBy to "name"
     // # TODO , in localStorage, have a reserved & sticky id - keys to keep track
 
-  }
-  onReserveCancel() {
-    this.reserveMode = false;    
+  }  
+
+// E D I T 
+  onEditShow() {
+    this.editMode = true;
+    this.reserveMode = false;
+    // set up reactive Form
+    this.editForm = new FormGroup({
+      'title': new FormControl(this.sticky.title, Validators.required),
+      'message': new FormControl(this.sticky.message, Validators.required),
+      'from': new FormControl(this.sticky.from, Validators.required)
+    });
   }
 
+  onEditSet() {
+    const id = this.sticky._id;
+    console.log(id);
+  }
+
+  
+// R E D E E M
+  onRedeemSet(){
+    
+  }
+  
+// D E L E T E 
+  onDeleteSet() {
+    
+  }
+
+// Cancel
+  onReserveEditModeCancel() {
+    this.reserveMode = false;
+    this.editMode = false;
+  }
 }
