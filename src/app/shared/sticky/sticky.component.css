@@ -1,4 +1,8 @@
 .sticky {
-    min-width: 20%;
+    width: 20%;
     display: inline-block;
+    height: 361px;
+}
+.sticky .message {
+    height: 120px;
 }

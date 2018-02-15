@@ -3,6 +3,8 @@ export class Sticky {
         public title: string,
         public message?: string,
         public from?: string,
+        public redeemed?: boolean,
+        public reserved?: boolean
     ) {
 
     }

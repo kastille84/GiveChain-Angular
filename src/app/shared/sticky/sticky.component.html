@@ -1,45 +1,77 @@
-<article 
-  class="sticky card text-center m-4"
-  >
-  <div class="card-body">
-    <h5 class="card-title">{{sticky.title}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{sticky.user.name}}</h6>
-    <p class="card-text">{{sticky.message}} <br> <small class="text-muted " >from {{sticky.from}}</small></p>
-    <hr>
-      <small *ngIf="cardType == 'available'"
-        class="card-text text-muted">{{sticky.user.address}}
-        <br> {{sticky.user.city}}, {{sticky.user.state}}
+<!-- Default Mode -->
+<ng-template [ngIf]="!reserveMode">
+  <article 
+    class="sticky card text-center m-4 align-top"
+    >
+    <div class="card-body">
+      <h5 class="card-title">{{sticky.title}}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">{{sticky.user.name}}</h6>
+      <p class="card-text message">{{sticky.message}} <br> <small class="text-muted " >from {{sticky.from}}</small></p>
+      <hr>
+        <small *ngIf="cardType == 'available'"
+          class="card-text text-muted">{{sticky.user.address}}
+          <br> {{sticky.user.city}}, {{sticky.user.state}}
+        </small>
+        <small *ngIf="cardType == 'reserved'"
+          class="card-text text-muted">Reserved by 
+          <br> <b>{{sticky.reservedBy}}</b>
+        </small>
+        <small *ngIf="cardType == 'redeemed'"
+          class="card-text text-muted">Redeemed by 
+          <br> <b>{{sticky.reservedBy}}</b>
+        </small>
+    </div>
+    <div class="card-footer">
+      <!-- L O G G E D  I N-->
+      <!-- Available -->
+      <div *ngIf="isLoggedIn && cardType == 'available'">
+          <button class="btn btn-success" (click)="onReserveShow()">Reserve</button>
+          <button class="btn btn-info">Edit</button> 
+          <button class="btn btn-danger">Delete</button>
+      </div>
+      <!-- Reserved -->
+      <div *ngIf="isLoggedIn && cardType == 'reserved'">
+          <button class="btn btn-success">Redeem</button>  
+      </div>
+      <!-- Redeemed -->
+      <div *ngIf="isLoggedIn && cardType == 'redeemed'">
+          <button class="btn btn-danger">Delete</button>
+          <small class="text-muted">Keep a record of sticky before deleting it</small>    
+      </div>
+      <!-- L O G G E D  O U T-->
+      <div *ngIf="!isLoggedIn">
+          <button class="btn btn-success" (click)="onReserveShow()">Reserve</button>
+          im logged out
+      </div>
+    </div>
+  </article>
+</ng-template>
+
+<!-- ReserveMode -->
+<ng-template [ngIf]="reserveMode">
+  <article 
+    class="sticky card text-center m-4 align-top"
+    (mouseleave)="onReserveCancel()"
+    >
+    <div class="card-body">
+      <h5 class="card-title">{{sticky.title}}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">{{sticky.user.name}}</h6>
+      <small>{{sticky.user.address}}<br>{{sticky.user.city}}, {{sticky.user.state}}</small>
+      <hr>
+      <form [formGroup]="reserveForm" (ngSubmit)="onReserveSet()">
+        <div class="form-group" >
+          <label for="reserveControl">Reserve</label>
+          <input 
+            type="text" 
+            id="reserveControl"
+            class="form-control"
+            placeholder="                 Your Full Name"
+            formControlName="reserveBy">
+        </div>
+        <button class="btn btn-success">Reserve Now</button>
+      </form>
+      <small class="mt-4 text-muted">Once reserved, make your way to the restaurant. Expires in 2 days.
       </small>
-      <small *ngIf="cardType == 'reserved'"
-        class="card-text text-muted">Reserved by 
-        <br> <b>{{sticky.reservedBy}}</b>
-      </small>
-      <small *ngIf="cardType == 'redeemed'"
-        class="card-text text-muted">Redeemed by 
-        <br> <b>{{sticky.reservedBy}}</b>
-      </small>
-  </div>
-  <div class="card-footer">
-    <!-- L O G G E D  I N-->
-    <!-- Available -->
-    <div *ngIf="isLoggedIn && cardType == 'available'">
-        <button class="btn btn-success">Reserve</button>
-        <button class="btn btn-info">Edit</button> 
-        <button class="btn btn-danger">Delete</button>
     </div>
-    <!-- Reserved -->
-    <div *ngIf="isLoggedIn && cardType == 'reserved'">
-        <button class="btn btn-success">Redeem</button>  
-    </div>
-    <!-- Redeemed -->
-    <div *ngIf="isLoggedIn && cardType == 'redeemed'">
-        <button class="btn btn-danger">Delete</button>
-        <small class="text-muted">Keep a record of sticky before deleting it</small>    
-    </div>
-    <!-- L O G G E D  O U T-->
-    <div *ngIf="!isLoggedIn">
-        <button class="btn btn-success">Reserve</button>
-        im logged out
-    </div>
-  </div>
-</article>
+  </article>
+</ng-template>
