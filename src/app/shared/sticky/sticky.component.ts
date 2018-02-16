@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { StickyService } from '../../services/sticky.service';
+import { FlashMessagesService } from 'angular2-flash-messages/module/flash-messages.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sticky',
@@ -13,31 +16,81 @@ export class StickyComponent implements OnInit {
   isLoggedIn = false;
   reserveMode = false;
   editMode = false;
+  errorMode = false;
+  errorMessage = '';
 
   reserveForm: FormGroup;
   editForm: FormGroup;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, 
+    private stickyService: StickyService,
+    private flashMessagesService: FlashMessagesService,
+    private router: Router) { }
 
   ngOnInit() {
     // get Logged In status
     this.isLoggedIn = this.userService.isAuthenticated();
-  }
-//  R E S E R V E 
-  onReserveShow() {
-    this.reserveMode = true;
-    this.editMode = false;
     // set up reactive Form
     this.reserveForm = new FormGroup({
       'reserveBy': new FormControl(null, Validators.required)
     });
+    // set up reactive Form
+    this.editForm = new FormGroup({
+      'title': new FormControl(this.sticky.title, Validators.required),
+      'message': new FormControl(this.sticky.message, Validators.required),
+      'from': new FormControl(this.sticky.from, Validators.required)
+    });
+  }
 
+//  R E S E R V E 
+  onReserveShow() {
+    this.reserveMode = true;
+    this.editMode = false;
+    this.errorMode = false;
   }
   // change reserve sticky from db & frontend sticky list
   onReserveSet() {
-    const id = this.sticky._id;
-    console.log(id);
+    //validate
+    if (this.reserveForm.status !== 'INVALID') {
+      const id = this.sticky._id;
+      // update sticky on frontend & backend
+      console.log(this.reserveForm);
+      const name = this.reserveForm.controls['reserveBy'].value;
+      this.stickyService.reserve(id, name).subscribe(
+        sticky => {
+          const stickyList = this.stickyService.getStickies();
+          stickyList.forEach(stickyItem => {
+            if (stickyItem._id === id) {
+              stickyItem.reserved = true;
+              stickyItem.reservedBy = name;
+            }
+          });
+          
+          // navigate away
+          this.router.navigate(['/dashboard/reserved']);
 
+        },
+        error => {
+          console.log('im error')
+          const stickyList = this.stickyService.getStickies();
+          stickyList.forEach(stickyItem => {
+            if (stickyItem._id === this.sticky._id) {
+              stickyItem.reserved = false;
+              stickyItem.reservedBy = '';
+            }
+          });          
+          // flash message
+          this.errorMode = true;
+          this.errorMessage = 'Sorry could not reserve at this time. Try another item.';
+          this.flashMessagesService.show(this.errorMessage, {cssClass: 'alert alert-danger', timeout: 5000});
+          // navigate away
+          this.router.navigate(['/dashboard']);
+        }
+      );
+
+      //navigate to same url
+      
+    }
     // # TODO - reach out to server
     // # TODO - set sticky.reserved to true & reservedBy to "name"
     // # TODO , in localStorage, have a reserved & sticky id - keys to keep track
@@ -48,12 +101,8 @@ export class StickyComponent implements OnInit {
   onEditShow() {
     this.editMode = true;
     this.reserveMode = false;
-    // set up reactive Form
-    this.editForm = new FormGroup({
-      'title': new FormControl(this.sticky.title, Validators.required),
-      'message': new FormControl(this.sticky.message, Validators.required),
-      'from': new FormControl(this.sticky.from, Validators.required)
-    });
+    this.errorMode = false;
+    
   }
 
   onEditSet() {
@@ -64,7 +113,7 @@ export class StickyComponent implements OnInit {
   
 // R E D E E M
   onRedeemSet(){
-    
+    // validate
   }
   
 // D E L E T E 
@@ -76,5 +125,6 @@ export class StickyComponent implements OnInit {
   onReserveEditModeCancel() {
     this.reserveMode = false;
     this.editMode = false;
+    this.errorMode = false;
   }
 }

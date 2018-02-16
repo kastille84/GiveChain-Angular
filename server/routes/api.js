@@ -260,8 +260,7 @@ router.get('/sticky', (req, res) => {
             //          }
             //      }
             //      // randomize the entries
-            //      stickyArray = __.shuffle(tempArray);
-                    
+            //      stickyArray = __.shuffle(tempArray);                  
                     return res.status(200).json({
                         users,
                         message: "Got All Users and Their Stickies"
@@ -367,6 +366,43 @@ router.patch('/sticky', authenticate, [
             });
 
 });
+    // # TODO - TEST 
+    // Reserve Sticky 
+router.patch('/sticky/reserve/:id', authenticate, [
+        check('reserved')
+            .exists()
+            .isBoolean(),
+        check('reservedBy')
+            .exists()
+            .trim()
+            .isAlpha()
+    ], (req, res) => {
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.status(500).json({
+                errorr: result
+            });
+        }
+        console.log("req", req);
+        const id = req.body._id;
+        Sticky.findByIdAndUpdate(id, {
+                reserved: true, 
+                reservedBy:req.body.reservedBy
+            }, {new: true}).exec()
+            .then( sticky => {
+                return res.status(200).json( {
+                    sticky,
+                    message: "Sticky reserved Successfully"
+                });
+            })
+            .catch(e=> {
+                return res.status(501).json({errors: e});
+            });
+
+}) ;   
+    
+    // # TODO - TEST 
+    // Redeem Sticky   
 
     // Delete Sticky
 router.delete('/sticky/:id', authenticate, (req, res) => {

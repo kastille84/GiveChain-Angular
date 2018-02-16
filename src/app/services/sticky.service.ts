@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Sticky } from './../models/sticky.model';
 
@@ -44,6 +44,29 @@ export class StickyService {
 
   getStickies() {
     return this.stickies;
+  }
+
+  reserve(id, name: string) {
+    let tempSticky: Sticky;
+    this.stickies.forEach(sticky => {
+      if (sticky._id === id) {
+        tempSticky = sticky;
+      }
+    });
+    const tempStickyStr = JSON.stringify(tempSticky);
+    const newSticky: Sticky = JSON.parse(tempStickyStr);
+    
+    newSticky.reserved = true;
+    newSticky.reservedBy = name;
+    
+    // reach out to the db, to update sticky
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+           'auth': localStorage.getItem('token')
+      })
+    };
+    return this.http.patch(this.url + '/sticky/reserve/' + id, newSticky, httpOptions);
   }
 
 }

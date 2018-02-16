@@ -14,7 +14,7 @@ const schema = mongoose.Schema({
         type: String,
         default: "Anonymous"
     },
-    reserve: {
+    reserved: {
         type: Boolean,
         default: false
     },

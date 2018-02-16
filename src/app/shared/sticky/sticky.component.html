@@ -48,12 +48,18 @@
 </ng-template>
 
 <!-- ReserveMode -->
-<ng-template [ngIf]="reserveMode">
+<ng-template [ngIf]="reserveMode && !editMode">
   <article 
     class="sticky card text-center m-4 align-top"
-    (mouseleave)="onReserveEditModeCancel()"
     >
     <div class="card-body">
+      <flash-messages></flash-messages>
+        <button type="button" 
+                class="close" 
+                aria-label="Close"
+                (click)="onReserveEditModeCancel()">
+            <span aria-hidden="true">&times;</span>
+          </button>
       <h5 class="card-title">{{sticky.title}}</h5>
       <h6 class="card-subtitle mb-2 text-muted">{{sticky.user.name}}</h6>
       <small>{{sticky.user.address}}<br>{{sticky.user.city}}, {{sticky.user.state}}</small>
@@ -66,6 +72,8 @@
             id="reserveControl"
             class="form-control"
             placeholder="                 Your Full Name"
+            required
+            minlength="5"
             formControlName="reserveBy">
         </div>
         <button class="btn btn-success">Reserve Now</button>
@@ -77,18 +85,24 @@
 </ng-template>
 
 <!-- Edit Mode -->
-<ng-template [ngIf]="editMode">
+<ng-template [ngIf]="editMode && !reserveMode">
   <article 
     class="sticky card text-center m-4 align-top"
-    (mouseleave)="onReserveEditModeCancel()"
     >
     <div class="card-body">
+        <button type="button" 
+              class="close" 
+              aria-label="Close"
+              (click)="onReserveEditModeCancel()">
+            <span aria-hidden="true">&times;</span>
+          </button>
       <form [formGroup]="editForm" (ngSubmit)="onEditSet()">
         <div class="form-group" >
           <input 
             type="text" 
             id="reserveControl"
             class="form-control"
+            style="width: 80%"
             formControlName="title">
         </div>
         <div class="form-group" >
@@ -112,3 +126,20 @@
     </div>
   </article>
 </ng-template>
+
+<!-- Eror Mode -->
+<!-- <ng-template [ngIf]="errorMode && !reserveMode && !editMode">
+  <article 
+    class="sticky card text-center m-4 align-top"
+    >
+    <div class="card-body">
+        <button type="button" 
+              class="close" 
+              aria-label="Close"
+              (click)="onReserveEditModeCancel()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        <flash-messages></flash-messages>
+    </div>
+  </article>
+</ng-template> -->
