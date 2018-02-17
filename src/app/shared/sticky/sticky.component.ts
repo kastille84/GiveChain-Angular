@@ -1,16 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StickyService } from '../../services/sticky.service';
 import { FlashMessagesService } from 'angular2-flash-messages/module/flash-messages.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-sticky',
   templateUrl: './sticky.component.html',
   styleUrls: ['./sticky.component.css']
 })
-export class StickyComponent implements OnInit {
+export class StickyComponent implements OnInit, OnDestroy {
   @Input() cardType;
   @Input() sticky;
   isLoggedIn = false;
@@ -18,6 +19,8 @@ export class StickyComponent implements OnInit {
   editMode = false;
   errorMode = false;
   errorMessage = '';
+
+  stickySub: Subscription;
 
   reserveForm: FormGroup;
   editForm: FormGroup;
@@ -55,7 +58,7 @@ export class StickyComponent implements OnInit {
       const id = this.sticky._id;
       // update sticky on frontend & backend
       console.log(this.reserveForm);
-      const name = this.reserveForm.controls['reserveBy'].value;
+      const name = this.reserveForm.controls['reserveBy'].value;      
       this.stickyService.reserve(id, name).subscribe(
         sticky => {
           const stickyList = this.stickyService.getStickies();
@@ -71,7 +74,6 @@ export class StickyComponent implements OnInit {
 
         },
         error => {
-          console.log('im error')
           const stickyList = this.stickyService.getStickies();
           stickyList.forEach(stickyItem => {
             if (stickyItem._id === this.sticky._id) {
@@ -86,16 +88,31 @@ export class StickyComponent implements OnInit {
           // navigate away
           this.router.navigate(['/dashboard']);
         }
-      );
-
-      //navigate to same url
-      
+      );      
     }
-    // # TODO - reach out to server
-    // # TODO - set sticky.reserved to true & reservedBy to "name"
-    // # TODO , in localStorage, have a reserved & sticky id - keys to keep track
-
   }  
+
+  onUnreserveSet() {
+    this.stickyService.reserve(this.sticky._id, 'xunreservex').subscribe(
+      sticky => {
+        const stickyList = this.stickyService.getStickies();
+        stickyList.forEach(stickyItem => {
+          if (stickyItem._id === this.sticky._id) {
+            stickyItem.reserved = false;
+            stickyItem.reservedBy = '';
+          }
+        });  
+        // navigate away
+        setTimeout(() => {
+          //this.flashMessagesService.show('Successfully Unreserved', {cssClass: 'alert alert-success', timeout: 2000});
+          this.router.navigate(['/dashboard']);
+        }, 1000);
+      },
+      error => {
+
+      }
+    );
+  }
 
 // E D I T 
   onEditShow() {
@@ -113,12 +130,37 @@ export class StickyComponent implements OnInit {
   
 // R E D E E M
   onRedeemSet(){
-    // validate
+    this.stickyService.redeem(this.sticky._id).subscribe(
+      sticky => {
+
+        // navigate to list of redeemed
+        this.router.navigate(['dashboard/redeemed']);
+      },
+      error => {
+        // revert the sticky back
+        const stickyList = this.stickyService.getStickies();
+        stickyList.forEach(stickyItem => {
+          if (stickyItem._id === this.sticky._id) {
+            stickyItem.redeemed = false;
+            stickyItem.redeemedDate = null;
+          }
+        });
+      }
+    );
   }
   
 // D E L E T E 
+  onDeletePrompt() {
+    // show a propmt on sticky with option of yes or no - for deleting sticky
+  }
+
   onDeleteSet() {
-    
+    // Do the actual Deleting - if yes on prompt
+
+  }
+
+  onDeleteCandel() {
+    // Cancel deleting - if no on prompt
   }
 
 // Cancel
@@ -127,4 +169,9 @@ export class StickyComponent implements OnInit {
     this.editMode = false;
     this.errorMode = false;
   }
+
+  ngOnDestroy() {
+
+  }
+
 }

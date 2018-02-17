@@ -8,6 +8,12 @@ export class StickyService {
   url = 'http://localhost:3000/api/';
   stickies: Sticky[] = [];
   @Output() stickiesSet = new EventEmitter<Sticky[]>();
+  httpOptions = {
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+         'auth': localStorage.getItem('token')
+    })
+  };
 
   constructor(private http: HttpClient) { }
 
@@ -56,17 +62,34 @@ export class StickyService {
     const tempStickyStr = JSON.stringify(tempSticky);
     const newSticky: Sticky = JSON.parse(tempStickyStr);
     
-    newSticky.reserved = true;
-    newSticky.reservedBy = name;
+    if (name !== 'xunreservex') {
+      // normal reserve
+      newSticky.reserved = true;
+      newSticky.reservedBy = name;
+      //# TODO
+      //newSticky.reservedDate = 
+    } else {
+      // a way to UNRESERVE
+      newSticky.reserved = false;
+      newSticky.reservedBy = name;
+    }
     
     // reach out to the db, to update sticky
-    const httpOptions = {
-      headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-           'auth': localStorage.getItem('token')
-      })
-    };
-    return this.http.patch(this.url + '/sticky/reserve/' + id, newSticky, httpOptions);
+    
+    return this.http.patch(this.url + 'sticky/reserve/' + id, newSticky, this.httpOptions);
+  }
+
+  redeem(id) {
+    // set stckys redeem to true on front end
+    this.stickies.forEach(sticky => {
+      if (sticky._id === id) {
+        sticky.redeemed = true;
+        // # TODO
+        //sticky.redeemedDate = 
+      }
+    });
+    //set sticky redeem to true on back end
+    return this.http.patch(this.url + 'sticky/redeem/' + id, null, this.httpOptions);
   }
 
 }

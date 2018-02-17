@@ -4,6 +4,7 @@
     class="sticky card text-center m-4 align-top"
     >
     <div class="card-body">
+      <flash-messages></flash-messages>
       <h5 class="card-title">{{sticky.title}}</h5>
       <h6 class="card-subtitle mb-2 text-muted">{{sticky.user.name}}</h6>
       <p class="card-text message">{{sticky.message}} <br> <small class="text-muted " >from {{sticky.from}}</small></p>
@@ -27,16 +28,17 @@
       <div *ngIf="isLoggedIn && cardType == 'available'">
           <button class="btn btn-success" (click)="onReserveShow()">Reserve</button>
           <button class="btn btn-info" (click)="onEditShow()">Edit</button> 
-          <button class="btn btn-danger" (click)="onDeleteset()">Delete</button>
+          <button class="btn btn-danger" (click)="onDeletePrompt()">Delete</button>
       </div>
       <!-- Reserved -->
       <div *ngIf="isLoggedIn && cardType == 'reserved'">
           <button class="btn btn-success" (click)="onRedeemSet()">Redeem</button>  
+          <button class="btn btn-default" (click)="onUnreserveSet()">Unreserve</button>
       </div>
       <!-- Redeemed -->
       <div *ngIf="isLoggedIn && cardType == 'redeemed'">
-          <button class="btn btn-danger" (click)="onDeleteSet()">Delete</button>
-          <small class="text-muted">Keep a record of sticky before deleting it</small>    
+          <button class="btn btn-danger" (click)="onDeletePrompt()">Delete</button><br>
+             
       </div>
       <!-- L O G G E D  O U T-->
       <div *ngIf="!isLoggedIn">

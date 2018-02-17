@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    if (!this.userService.isAuthenticated()) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('expiresAt');
+      localStorage.removeItem('url');
+    }
   }
 
 }

@@ -371,23 +371,28 @@ router.patch('/sticky', authenticate, [
 router.patch('/sticky/reserve/:id', authenticate, [
         check('reserved')
             .exists()
-            .isBoolean(),
+            .isBoolean()
+            .escape(),
         check('reservedBy')
             .exists()
             .trim()
-            .isAlpha()
+            .escape()
     ], (req, res) => {
         const result = validationResult(req);
         if (!result.isEmpty()) {
+            console.log('im error');
             return res.status(500).json({
-                errorr: result
+                error: result
             });
         }
-        console.log("req", req);
+        
+        // check for xunreservex - for unreserving
+        const reservedBy = (req.body.reservedBy !== 'xunreservex') ? req.body.reservedBy : '';
+        const reserved = (reservedBy) ? true : false;
         const id = req.body._id;
         Sticky.findByIdAndUpdate(id, {
-                reserved: true, 
-                reservedBy:req.body.reservedBy
+                reserved: reserved, 
+                reservedBy:reservedBy
             }, {new: true}).exec()
             .then( sticky => {
                 return res.status(200).json( {
@@ -403,6 +408,25 @@ router.patch('/sticky/reserve/:id', authenticate, [
     
     // # TODO - TEST 
     // Redeem Sticky   
+router.patch('/sticky/redeem/:id', authenticate, (req, res) => {
+    //get id
+    const id = req.params['id'];
+
+    Sticky.findByIdAndUpdate(id, {
+        redeemed: true,
+        redeemedDate: new Date().getTime()
+    }, {new: true}).exec()
+    .then( sticky => {
+        return res.status(200).json( {
+            sticky,
+            message: "Sticky redeemed Successfully"
+        });
+    })
+    .catch(e=> {
+        return res.status(501).json({errors: e});
+    });
+});
+
 
     // Delete Sticky
 router.delete('/sticky/:id', authenticate, (req, res) => {
