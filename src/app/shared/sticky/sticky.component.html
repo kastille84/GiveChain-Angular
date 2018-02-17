@@ -4,6 +4,14 @@
     class="sticky card text-center m-4 align-top"
     >
     <div class="card-body">
+      <div class="alert alert-danger prompt" *ngIf="cardType==='redeemed' && deletePrompt===true">
+        <p>Are you sure you want to delete this?</p> 
+        <button class="btn btn-outline-danger"
+                (click)="onDeleteSet()">Yes</button>
+        <button class="btn btn-outline-success"
+                (click)="onDeleteCancel()">No</button><br>
+        <small>*Bookkeeping: keep record of this sticky before deleting.</small>
+      </div>
       <flash-messages></flash-messages>
       <h5 class="card-title">{{sticky.title}}</h5>
       <h6 class="card-subtitle mb-2 text-muted">{{sticky.user.name}}</h6>

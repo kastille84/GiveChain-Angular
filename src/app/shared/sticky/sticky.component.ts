@@ -19,6 +19,7 @@ export class StickyComponent implements OnInit, OnDestroy {
   editMode = false;
   errorMode = false;
   errorMessage = '';
+  deletePrompt = false;
 
   stickySub: Subscription;
 
@@ -152,15 +153,19 @@ export class StickyComponent implements OnInit, OnDestroy {
 // D E L E T E 
   onDeletePrompt() {
     // show a propmt on sticky with option of yes or no - for deleting sticky
+    this.deletePrompt = true;
   }
 
   onDeleteSet() {
     // Do the actual Deleting - if yes on prompt
-
+    console.log('set');
+    
   }
 
-  onDeleteCandel() {
+  onDeleteCancel() {
     // Cancel deleting - if no on prompt
+    console.log('cancel');
+    this.deletePrompt = false;
   }
 
 // Cancel
