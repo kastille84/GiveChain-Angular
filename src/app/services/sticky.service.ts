@@ -84,12 +84,17 @@ export class StickyService {
     this.stickies.forEach(sticky => {
       if (sticky._id === id) {
         sticky.redeemed = true;
-        // # TODO
-        //sticky.redeemedDate = 
       }
     });
     //set sticky redeem to true on back end
     return this.http.patch(this.url + 'sticky/redeem/' + id, null, this.httpOptions);
+  }
+
+  delete(id) {
+    let tempStickies: Sticky[] = [];
+    tempStickies = this.stickies.filter(sticky => sticky._id !== id);
+    this.stickies = tempStickies;
+    return this.http.delete(this.url + 'sticky/' + id, this.httpOptions);
   }
 
 }

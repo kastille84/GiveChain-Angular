@@ -389,10 +389,12 @@ router.patch('/sticky/reserve/:id', authenticate, [
         // check for xunreservex - for unreserving
         const reservedBy = (req.body.reservedBy !== 'xunreservex') ? req.body.reservedBy : '';
         const reserved = (reservedBy) ? true : false;
+        const reservedDate = (reserve) ? new Date().getTime(): null;
         const id = req.body._id;
         Sticky.findByIdAndUpdate(id, {
                 reserved: reserved, 
-                reservedBy:reservedBy
+                reservedBy:reservedBy,
+                reservedDate: reservedDate
             }, {new: true}).exec()
             .then( sticky => {
                 return res.status(200).json( {
@@ -431,21 +433,34 @@ router.patch('/sticky/redeem/:id', authenticate, (req, res) => {
     // Delete Sticky
 router.delete('/sticky/:id', authenticate, (req, res) => {
     // get sticky id from req.body
-    const id = req.params.id;
-
-    Sticky.findByIdAndRemove(id).exec()
-        .then(sticky => {
-            if (!sticky) {
-                return res.status(500).json({message: 'No Sticky found in db'})
-            }
-            return res.status(200).json({
-                sticky,
-                message: "Sticky Deleted"
-            });
-        })
-        .catch(e => {
-            return res.status(500).json(e);
+    const id = req.params['id'];
+    const sticky = null;
+    // Sticky.findByIdAndRemove(id).exec()
+    //     .then(sticky => {
+    //         if (!sticky) {
+    //             return res.status(500).json({message: 'No Sticky found in db'})
+    //         }
+    //         return res.status(200).json({
+    //             sticky,
+    //             message: "Sticky Deleted"
+    //         });
+    //     })
+    //     .catch(e => {
+    //         return res.status(500).json(e);
+    //     });
+    console.log('id', id);
+    Sticky.findByIdAndRemove(id, {rawResult: true}, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                error: "could not remove item", 
+                sticky: result});
+        } 
+        
+        return res.status(200).json({
+            sticky: result,
+            message: "Sticky Deleted"
         });
+    });
 
 });
 

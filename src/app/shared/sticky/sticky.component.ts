@@ -159,7 +159,14 @@ export class StickyComponent implements OnInit, OnDestroy {
   onDeleteSet() {
     // Do the actual Deleting - if yes on prompt
     console.log('set');
-    
+    this.stickyService.delete(this.sticky._id).subscribe(
+      sticky => {
+        this.router.navigate(['/dashboard']);
+      },
+      error => {
+
+      }
+    );
   }
 
   onDeleteCancel() {
