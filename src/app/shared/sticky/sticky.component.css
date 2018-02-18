@@ -2,12 +2,19 @@
     width: 20%;
     min-width: 314px;
     display: inline-block;
-    height: 361px;
+    /* height: 361px; */
+    height: 385px;
 }
 .sticky .message {
     height: 120px;
 }
 
+.sticky h5 {
+    height: 48px;
+}
+.sticky p {
+    height: 120px;
+}
 input.ng-touched.ng-invalid {
     border: 1px solid red;
 }

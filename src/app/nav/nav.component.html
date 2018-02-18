@@ -20,7 +20,9 @@
     <!-- LOGGED IN -->
     <ng-template [ngIf]="isLoggedIn">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item" routerLinkActive="active">
+          <li class="nav-item" 
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: true}">
             <a class="nav-link" routerLink="/dashboard/">Available</a>
           </li>   
           <li class="nav-item" routerLinkActive="active">
@@ -36,6 +38,6 @@
             <a class="nav-link" (click)="onLogout()" style="cursor:pointer">Logout</a>
           </li>  
         </ul>
-      </ng-template>
+    </ng-template>
   </div>
 </nav>

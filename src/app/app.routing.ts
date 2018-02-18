@@ -6,7 +6,7 @@ import { LoginComponent } from './home/login/login.component';
 import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.component';
 import { StickiesReservedComponent } from './dashboard/stickies-reserved/stickies-reserved.component';
 import { StickiesRedeemedComponent } from './dashboard/stickies-redeemed/stickies-redeemed.component';
-
+import { StickyCreateComponent } from './dashboard/sticky-create/sticky-create.component';
 
 import { AuthGuard } from './services/auth-guard.service';
 
@@ -18,7 +18,8 @@ const appRoutes: Routes = [
     {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children: [        
         {path: '', component: StickiesListComponent},
         {path: 'reserved', component: StickiesReservedComponent},
-        {path: 'redeemed', component: StickiesRedeemedComponent}
+        {path: 'redeemed', component: StickiesRedeemedComponent},
+        {path: 'create', component: StickyCreateComponent}
     ]},
 ];
 

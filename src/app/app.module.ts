@@ -27,6 +27,7 @@ import { StickiesListComponent } from './dashboard/stickies-list/stickies-list.c
 import { StickiesReservedComponent } from './dashboard/stickies-reserved/stickies-reserved.component';
 import { StickiesRedeemedComponent } from './dashboard/stickies-redeemed/stickies-redeemed.component';
 import { StickyComponent } from './shared/sticky/sticky.component';
+import { StickyCreateComponent } from './dashboard/sticky-create/sticky-create.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { StickyComponent } from './shared/sticky/sticky.component';
     StickiesListComponent,
     StickiesReservedComponent,
     StickiesRedeemedComponent,
-    StickyComponent
+    StickyComponent,
+    StickyCreateComponent
   ],
   imports: [
     BrowserModule,
