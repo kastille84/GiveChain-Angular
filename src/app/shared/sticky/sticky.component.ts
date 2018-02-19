@@ -71,9 +71,13 @@ export class StickyComponent implements OnInit, OnDestroy {
             }
           });
           
+          this.flashMessagesService.show('Sticky Reserved Successfully!', {cssClass:'alert alert-success', timeout:2000})
+          
           // navigate away
-          this.router.navigate(['/dashboard/reserved']);
+          setTimeout(() => {
+            this.router.navigate(['/dashboard/reserved']);
 
+          }, 2500);
         },
         error => {
           const stickyList = this.stickyService.getStickies();
@@ -103,15 +107,14 @@ export class StickyComponent implements OnInit, OnDestroy {
             stickyItem.reserved = false;
             stickyItem.reservedBy = '';
           }
-        });  
+        }); 
         // navigate away
         setTimeout(() => {
-          //this.flashMessagesService.show('Successfully Unreserved', {cssClass: 'alert alert-success', timeout: 2000});
           this.router.navigate(['/dashboard']);
-        }, 1000);
+        }, 600);
       },
       error => {
-
+        this.flashMessagesService.show(this.errorMessage, {cssClass: 'alert alert-danger', timeout: 5000});
       }
     );
   }
@@ -149,7 +152,7 @@ export class StickyComponent implements OnInit, OnDestroy {
           this.flashMessagesService.show('Edit Successfull', {cssClass: 'alert alert-success', timeOut: 2000});
           setTimeout( () => {
             this.editMode = false;
-          }, 3000);
+          }, 2500);
         },
         (error) => {
           this.flashMessagesService.show('Could Not Edit at this time.', {cssClass: 'alert alert-danger', timeOut: 2000});
@@ -165,9 +168,10 @@ export class StickyComponent implements OnInit, OnDestroy {
   onRedeemSet(){
     this.stickyService.redeem(this.sticky._id).subscribe(
       sticky => {
+        this.flashMessagesService.show('Reserved Successfull', {cssClass: 'alert alert-success', timeOut: 2000});
 
-        // navigate to list of redeemed
-        this.router.navigate(['dashboard/redeemed']);
+          // navigate to list of redeemed
+          this.router.navigate(['dashboard/redeemed']);
       },
       error => {
         // revert the sticky back

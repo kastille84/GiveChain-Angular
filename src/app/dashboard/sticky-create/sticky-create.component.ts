@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { Sticky } from './../../models/sticky.model';
 import { StickyService } from '../../services/sticky.service';
+import { FlashMessagesService } from 'angular2-flash-messages/module/flash-messages.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class StickyCreateComponent implements OnInit {
   createForm: FormGroup;
 
   constructor(private stickyService: StickyService,
-          private router: Router) { }
+          private router: Router, 
+          private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
     this.createForm = new FormGroup({
@@ -49,8 +51,11 @@ export class StickyCreateComponent implements OnInit {
           const stickyList = this.stickyService.getStickies();         
           stickyList.unshift(sticky);
 
-          //navigate to available
-          this.router.navigate(['/dashboard']);
+          this.flashMessagesService.show('Sticky Created Successfully', {cssClass: 'alert alert-success', timeout: 2000});
+          setTimeout(() => {
+            //navigate to available
+            this.router.navigate(['/dashboard']);
+          }, 2000);
         },
         error => {
 

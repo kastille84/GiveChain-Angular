@@ -396,9 +396,9 @@ router.patch('/sticky/reserve/:id', authenticate, [
         }
         
         // check for xunreservex - for unreserving
-        const reservedBy = (req.body.reservedBy !== 'xunreservex') ? req.body.reservedBy : '';
+        const reservedBy = (req.body.reservedBy !== 'xunreservex') ? req.body.reservedBy : null;
         const reserved = (reservedBy) ? true : false;
-        const reservedDate = (reserve) ? new Date().getTime(): null;
+        const reservedDate = (reserved) ? new Date().getTime(): null;
         const id = req.body._id;
         Sticky.findByIdAndUpdate(id, {
                 reserved: reserved, 
