@@ -298,13 +298,14 @@ router.post('/sticky', authenticate, [
         // get restaurant_id from decoded jwt  
         const id = req.decoded.id;
         const newFrom = (req.body.from === null)? 'Anonymous': req.body.from;
+        const newMessage = (req.body.message)? req.body.message: "I give you this food item as an act of Kindness. May you also spread love and kindness to others.";
         console.log('newfrom', req.body.from);
         console.log('user_id', id);
             // currently we are just grabbing the 1st user on the collection     
         User.findOne({_id: id}).then((doc) => {              
                 const sticky = new Sticky({
                     "title": req.body.title,
-                    "message": req.body.message,
+                    "message": newMessage, 
                     "from":newFrom ,
                     "user": doc._id
                 });

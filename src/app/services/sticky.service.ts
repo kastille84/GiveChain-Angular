@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter, Output } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import 'rxjs/add/operator/map';
 
 import { Sticky } from './../models/sticky.model';
 
@@ -52,7 +53,7 @@ export class StickyService {
     return this.stickies;
   }
 
-  create(sticky: Sticky) {
+  create(sticky) {
     return this.http.post(this.url + 'sticky', sticky, this.httpOptions);
   }
 

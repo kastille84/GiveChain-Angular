@@ -23,10 +23,9 @@ export class StickyCreateComponent implements OnInit {
                 Validators.required,
                 Validators.maxLength(40)
               ]),
-      'message': new FormControl(null, [
-                Validators.required,
+      'message': new FormControl(null,
                 Validators.maxLength(130)
-              ]),
+              ),
       'from': new FormControl(null,
                 Validators.maxLength(40)
               )
@@ -45,9 +44,11 @@ export class StickyCreateComponent implements OnInit {
       console.log(this.createForm);     
 
       this.stickyService.create(newSticky).subscribe(
-        resp => {
+        (resp: any) => {
           const sticky = resp.sticky;
           const stickyList = this.stickyService.getStickies();
+          console.log('ex stikcy', typeof(stickyList[3]));
+          console.log('unshift', typeof(sticky));          
           stickyList.unshift(sticky);
 
           //navigate to available
