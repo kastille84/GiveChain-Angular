@@ -27,6 +27,7 @@ flash-messages, .prompt {
     top: 0px;
     left: 0px;
     z-index:10;
+    width: 100%;
 }
 .prompt {
     width: 100%;

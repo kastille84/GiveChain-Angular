@@ -5,6 +5,7 @@ import { StickyService } from '../../services/sticky.service';
 import { FlashMessagesService } from 'angular2-flash-messages/module/flash-messages.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { Sticky } from './../../models/sticky.model';
 
 @Component({
   selector: 'app-sticky',
@@ -59,7 +60,6 @@ export class StickyComponent implements OnInit, OnDestroy {
     if (this.reserveForm.status !== 'INVALID') {
       const id = this.sticky._id;
       // update sticky on frontend & backend
-      console.log(this.reserveForm);
       const name = this.reserveForm.controls['reserveBy'].value;      
       this.stickyService.reserve(id, name).subscribe(
         sticky => {
@@ -125,8 +125,39 @@ export class StickyComponent implements OnInit, OnDestroy {
   }
 
   onEditSet() {
-    const id = this.sticky._id;
-    console.log(id);
+    if (this.editForm.status !== 'INVALID') {
+      // update on the frontend
+        // find sticky on array
+      const stickyList = this.stickyService.getStickies();
+      stickyList.forEach(stickyItem => {
+        if (stickyItem._id === this.sticky._id) {
+          stickyItem.title = this.editForm.controls['title'].value;
+          stickyItem.message = this.editForm.controls['message'].value;
+          stickyItem.from = this.editForm.controls['from'].value;
+        }
+      });
+
+      // update on the backend
+      const tempSticky = new Sticky(
+        this.editForm.controls['title'].value,
+        this.editForm.controls['message'].value,
+        this.editForm.controls['from'].value
+      );
+      
+      this.stickyService.edit(this.sticky._id, tempSticky).subscribe(
+        (sticky) => {          
+          this.flashMessagesService.show('Edit Successfull', {cssClass: 'alert alert-success', timeOut: 2000});
+          setTimeout( () => {
+            this.editMode = false;
+          }, 3000);
+        },
+        (error) => {
+          this.flashMessagesService.show('Could Not Edit at this time.', {cssClass: 'alert alert-danger', timeOut: 2000});
+
+        }
+      );
+    }
+
   }
 
   

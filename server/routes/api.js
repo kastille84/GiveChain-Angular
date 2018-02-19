@@ -334,13 +334,18 @@ router.post('/sticky', authenticate, [
 });
 
     // Update Sticky
-router.patch('/sticky', authenticate, [
+router.patch('/sticky/edit/:id', authenticate, [
         check("title")
             .exists()
-            .isLength({max:50})
+            .isLength({max:40})
             .trim(),
         check('message')
-            .isLength({max:150})
+            .exists()
+            .isLength({max:130})
+            .trim(),
+        check('from')
+            .exists()
+            .isLength({max:40})
             .trim()
     ], 
     (req, res) => {
@@ -353,10 +358,11 @@ router.patch('/sticky', authenticate, [
 
         // update record
             // assume we will get sticky id through req.body
-        const id = req.body.id;
+        const id = req.params['id'];
         Sticky.findByIdAndUpdate(id, {
                 title: req.body.title,
-                message: req.body.message
+                message: req.body.message,
+                from: req.body.from
             }, {new: true}).exec()
             .then( sticky => {
                 return res.status(200).json( {

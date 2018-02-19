@@ -46,9 +46,7 @@ export class StickyCreateComponent implements OnInit {
       this.stickyService.create(newSticky).subscribe(
         (resp: any) => {
           const sticky = resp.sticky;
-          const stickyList = this.stickyService.getStickies();
-          console.log('ex stikcy', typeof(stickyList[3]));
-          console.log('unshift', typeof(sticky));          
+          const stickyList = this.stickyService.getStickies();         
           stickyList.unshift(sticky);
 
           //navigate to available

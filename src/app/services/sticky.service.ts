@@ -57,6 +57,10 @@ export class StickyService {
     return this.http.post(this.url + 'sticky', sticky, this.httpOptions);
   }
 
+  edit(id, sticky) {
+    return this.http.patch(this.url + 'sticky/edit/' + id, sticky, this.httpOptions);
+  }
+
   reserve(id, name: string) {
     let tempSticky: Sticky;
     this.stickies.forEach(sticky => {
