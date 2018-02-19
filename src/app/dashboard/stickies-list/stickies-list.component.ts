@@ -31,6 +31,11 @@ export class StickiesListComponent implements OnInit, OnDestroy {
       this.stickies = finalStickies;
     });
     
+    this.regetStickies();
+       
+  }
+
+  regetStickies() {
     // grab it afterwards
     let tempStickies = this.stickyService.getStickies();
     let finalStickies = [];
@@ -40,8 +45,6 @@ export class StickiesListComponent implements OnInit, OnDestroy {
         }
       }
       this.stickies = finalStickies;
-
-    
   }
 
 

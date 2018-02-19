@@ -11,25 +11,27 @@ const schema = mongoose.Schema({
         default: "This is for you with love. Enjoy and pass on the kindness."
     },
     from: {
-        type: String,
-        default: "Anonymous"
+        type: String
     },
     reserved: {
         type: Boolean,
         default: false
     },
     reservedBy: {
-        type: String
+        type: String,
+        default: null
     },
     reservedDate: {
-        type: Date
+        type: Date,
+        default: null
     },
     redeemed: {
         type: Boolean,
         default: false
     },
     redeemedDate: {
-        type: Date
+        type: Date,
+        default: null
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

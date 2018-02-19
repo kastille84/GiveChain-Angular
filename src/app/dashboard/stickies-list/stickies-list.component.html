@@ -1,3 +1,7 @@
 <h1>List of Available Sticky Notes</h1>
-<app-sticky *ngFor="let sticky of stickies" cardType="available" [sticky]="sticky"></app-sticky>
+<app-sticky 
+    *ngFor="let sticky of stickies" 
+    cardType="available" 
+    [sticky]="sticky"
+    (stickyDeleted)="regetStickies()"></app-sticky>
 

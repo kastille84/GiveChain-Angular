@@ -236,9 +236,7 @@ router.get('/sticky', (req, res) => {
     const state = req.query.state? (req.query.state).toLowerCase() : null;
     // ?restaurant=rosaspiza
     const restaurant = req.query.restaurant? (req.query.restaurant).toLowerCase() : null;
-    // get all stickies
-    let stickyArray = [];
-
+   
     if (city && state) {
         let promise = null;
         if(!restaurant) {        
@@ -252,15 +250,14 @@ router.get('/sticky', (req, res) => {
                     // doesn't match city and or state
                     return res.status(404).json({error: "Incorrect City/State Combination"});                             
             }
-            // let tempArray = [];
-            //      //loop through each user and dump their stickies into stickyArray
-            //      for (let i = 0; i < users.length; i++) {
-            //          for(let g = 0; g < users[i].stickies.length;g++) {
-            //              tempArray.push(users[i].stickies[g]);            
-            //          }
-            //      }
-            //      // randomize the entries
-            //      stickyArray = __.shuffle(tempArray);                  
+            
+                 //loop through each user and reverse their stickies
+                 for (let i = 0; i < users.length; i++) {
+                    const tempStickies = users[i].stickies
+                    // reverse order of stickies
+                    users[i].stickies = __.reverse(tempStickies);
+                 }
+                                   
                     return res.status(200).json({
                         users,
                         message: "Got All Users and Their Stickies"
@@ -279,13 +276,13 @@ router.get('/sticky', (req, res) => {
 router.post('/sticky', authenticate, [
         check("title")
             .exists()
-            .isLength({ max:50})
+            .isLength({ max:40})
             .trim(),
         check('message')
-            .isLength({max:150})
+            .isLength({max:130})
             .trim(),
         check('from')
-            .isLength({max:50})
+            .isLength({max:40})
             .trim()
 
     ], 
@@ -300,31 +297,36 @@ router.post('/sticky', authenticate, [
         // find user associated with the stickies
         // get restaurant_id from decoded jwt  
         const id = req.decoded.id;
-            // currently we are just grabbing the 1st user on the collection
-        // #TODO - currently saved sticky must be associated with user        
-        User.findOne({_id: id}).then((doc) => {     
-            const sticky = new Sticky({
-                "title": req.body.title,
-                "message": req.body.message,
-                "from": req.body.from,
-                "user": doc._id
-            });
+        const newFrom = (req.body.from === null)? 'Anonymous': req.body.from;
+        console.log('newfrom', req.body.from);
+        console.log('user_id', id);
+            // currently we are just grabbing the 1st user on the collection     
+        User.findOne({_id: id}).then((doc) => {              
+                const sticky = new Sticky({
+                    "title": req.body.title,
+                    "message": req.body.message,
+                    "from":newFrom ,
+                    "user": doc._id
+                });
+            
+
             sticky.save((err, result) => {
                 if (err) {
-                    return res.status(500).json({error: "Somethingo went wrong"});
+                    return res.status(500).json({error: "Something went wrong"});
                 }
                 // save/push  sticky_id into user array
                 doc.stickies.push(result._id);
                 doc.save();
-
+                // # TODO - get the user's info into the sticky for frontend
+                result.user = doc;
                 return res.status(200).json({
-                        restaurant: result,
+                        sticky: result,
                         message: "Sticky Added Successfully"
                     });
             });
         }).catch(e => {
             // could not find user with said id
-            return res.status(500).json({error:"Somethingz went wrong"})
+            return res.status(500).json({error:e})
         });
 
         

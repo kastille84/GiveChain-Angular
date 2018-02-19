@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { StickyService } from '../../services/sticky.service';
@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class StickyComponent implements OnInit, OnDestroy {
   @Input() cardType;
   @Input() sticky;
+  @Output() stickyDeleted = new EventEmitter<boolean>();
   isLoggedIn = false;
   reserveMode = false;
   editMode = false;
@@ -161,7 +162,15 @@ export class StickyComponent implements OnInit, OnDestroy {
     console.log('set');
     this.stickyService.delete(this.sticky._id).subscribe(
       sticky => {
-        this.router.navigate(['/dashboard']);
+        if (this.cardType === 'redeemed') {
+          this.router.navigate(['/dashboard']);
+        }
+
+        if (this.cardType === 'available') {
+          // emit event to parent component to update stickies
+          this.stickyDeleted.emit(true);
+        }
+
       },
       error => {
 
