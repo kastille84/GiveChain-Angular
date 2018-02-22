@@ -444,27 +444,12 @@ router.delete('/sticky/:id', authenticate, (req, res) => {
     // get sticky id from req.body
     const id = req.params['id'];
     const sticky = null;
-    // Sticky.findByIdAndRemove(id).exec()
-    //     .then(sticky => {
-    //         if (!sticky) {
-    //             return res.status(500).json({message: 'No Sticky found in db'})
-    //         }
-    //         return res.status(200).json({
-    //             sticky,
-    //             message: "Sticky Deleted"
-    //         });
-    //     })
-    //     .catch(e => {
-    //         return res.status(500).json(e);
-    //     });
-    console.log('id', id);
     Sticky.findByIdAndRemove(id, {rawResult: true}, (err, result) => {
-        if (err) {
+        if (err || result.value == null) {
             return res.status(500).json({
                 error: "could not remove item", 
                 sticky: result});
-        } 
-        
+        }
         return res.status(200).json({
             sticky: result,
             message: "Sticky Deleted"

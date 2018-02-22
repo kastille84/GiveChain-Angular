@@ -42,7 +42,7 @@ describe('GET /sticky', function() {
             .expect('Content-Type', /json/)
             .expect(200)
             .expect( (res) => {
-                expect(res.body.stickyArray).toBeTruthy();
+                expect(res.body.users).toBeTruthy();
             })
             .end(done);
     }); 
@@ -62,7 +62,7 @@ describe('POST /register', function() {
 
     // test 1, should create user
     it('should create user AND send verification email', function(done) {
-        this.timeout(5000);
+        this.timeout(6000);
         request(app)
             .post('/api/register')
             .send({
@@ -264,15 +264,17 @@ describe("POST /sticky", () => {
     
 });
 
-describe('PATCH /sticky', () => {
+describe('PATCH /sticky/edit', () => {
     // test 1, should update an existing sticky
     it('should update existing sticky', function(done) {
         request(app)
-            .patch('/api/sticky')
+            .patch('/api/sticky/edit/' + firstStickyId)
             .set('auth', userOneToken)
             .send({
                 id: firstStickyId,
-                title:"Pretzle with Cheese"
+                title:"Pretzle with Cheese",
+                message: "Hope you enjoy it.",
+                from: "Anonymous"
             })
             .expect(200)
             .end(done);
@@ -280,11 +282,12 @@ describe('PATCH /sticky', () => {
     // test 2. should not update sticky if invalid id is passed
     it('should not update sticky if id is wrong', function(done) {
         request(app)
-            .patch('/api/sticky')
+            .patch('/api/sticky/edit/23945')
             .set('auth', userOneToken)
             .send({
-                id: '23945',
-                title: "Omelet"
+                title: "Omelet",
+                message: "Hope you enjoy it.",
+                from: "Anonymous"
             })
             .expect(501)
             .end(done);
@@ -292,11 +295,70 @@ describe('PATCH /sticky', () => {
     // test 3. should not update sticky if patch data is invalid
     it('should not update sticky if patch data is invalid', function(done) {
         request(app)
-            .patch('/api/sticky')
+            .patch('/api/sticky/edit/' + firstStickyId)
             .set('auth', userOneToken)
             .send({
                 id: firstStickyId
             })
+            .expect(501)
+            .end(done);
+    });
+
+});
+
+describe('PATCH /sticky/reserve', () => {
+    // test 1. Should reserve sticky with right inputs
+    it('should reserve sticky with correct inputs', function(done) {
+        request(app)
+            .patch('/api/sticky/reserve/' + firstStickyId)
+            .set('auth', userOneToken)
+            .send({
+                reserved: true,
+                reservedBy: "Emerson"
+            })
+            .expect(200)
+            .end(done);
+    });
+    // test 2. Should NOT reserve sticky with missing inputs
+    it('should NOT reserve sticky with missing inputs', function(done) {
+        request(app)
+            .patch('/api/sticky/reserve/' + firstStickyId)
+            .set('auth', userOneToken)
+            .send({
+                reserved: true
+            })
+            .expect(500)
+            .end(done);
+    });
+
+    // test 3. Unreserve
+    it('should UNRESERVE sticky', function(done) {
+        request(app)
+            .patch('/api/sticky/reserve/' + firstStickyId)
+            .set('auth', userOneToken)
+            .send({
+                reserved: true,
+                reservedBy: "xunreservex"
+            })
+            .expect(200)
+            .end(done);
+    });
+});
+
+describe('PATCH /sticky/redeem', () => {
+    // test 1. Should redeem sticky with valid id
+    it('should redeem sticky with valid id', function(done) {
+        request(app)
+            .patch('/api/sticky/redeem/' + firstStickyId)
+            .set('auth', userOneToken)
+            .expect(200)
+            .end(done);
+    });
+    // test 2. Should NOT redeem sticky with missing inputs
+    it('should NOT redeem sticky with invalid id', function(done) {
+        request(app)
+            .patch('/api/sticky/redeem/1234dj')
+            .set('auth', userOneToken)
             .expect(501)
             .end(done);
     });

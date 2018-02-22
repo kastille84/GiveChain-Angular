@@ -9,7 +9,7 @@ describe('StickyService', () => {
     });
   });
 
-  it('should be created', inject([StickyService], (service: StickyService) => {
-    expect(service).toBeTruthy();
-  }));
+  // it('should be created', inject([StickyService], (service: StickyService) => {
+  //   expect(service).toBeTruthy();
+  // }));
 });

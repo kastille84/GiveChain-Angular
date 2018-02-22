@@ -18,14 +18,14 @@ describe('SERVICE: UserService', () => {
     });
 
     describe('isAuthenticated', () => {
-        beforeEach(async(() => {
+        beforeEach(() => {
             localStorage.setItem('token', '');
             localStorage.setItem('expiresAt', '');
-        }));
-        afterEach(async(() => {
+        });
+        afterEach(() => {
             localStorage.removeItem('token');
             localStorage.removeItem('expiresAt');
-        }));
+        });
     
         it('should return False if No token is present in isAuthenticated ', () => {        
             let bool = service.isAuthenticated();
@@ -35,7 +35,7 @@ describe('SERVICE: UserService', () => {
             localStorage.setItem('expiresAt', new Date().getTime().toString());
             // let now = new Date().getTime().toString();
             tick();
-    
+            
             let bool = service.isAuthenticated();
             expect(bool).toBeFalsy();
         }));

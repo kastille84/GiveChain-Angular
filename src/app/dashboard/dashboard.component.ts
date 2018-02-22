@@ -9,7 +9,8 @@ import { StickyService } from '../services/sticky.service';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private flashMessagesService: FlashMessagesService, private stickyService: StickyService) { }
+  constructor(private flashMessagesService: FlashMessagesService, 
+    private stickyService: StickyService) { }
 
   ngOnInit() {
     // get the stickies from server

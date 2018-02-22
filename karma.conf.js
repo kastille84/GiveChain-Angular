@@ -22,6 +22,7 @@ module.exports = function (config) {
     angularCli: {
       environment: 'dev'
     },
+    browserNoActivityTimeout: 400000,
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,

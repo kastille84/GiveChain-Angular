@@ -49,7 +49,7 @@
              
       </div>
       <!-- L O G G E D  O U T-->
-      <div *ngIf="!isLoggedIn">
+      <div *ngIf="!isLoggedIn" id="loggedOut">
           <button class="btn btn-success" (click)="onReserveShow()">Reserve</button>
           im logged out
       </div>
@@ -111,13 +111,13 @@
         <div class="form-group" >
           <input 
             type="text" 
-            id="reserveControl"
+            id="editControl"
             class="form-control"
             style="width: 80%"
             formControlName="title">
         </div>
         <div class="form-group" >
-          <label for="reserveControl">Message</label>
+          <label>Message</label>
           <textarea 
             class="form-control"
             rows="4"
@@ -125,7 +125,7 @@
             formControlName="message"></textarea>
         </div>
         <div class="form-group" >
-          <label for="reserveControl">From</label>
+          <label>From</label>
           <input 
             type="text" 
             id="reserveControl"
