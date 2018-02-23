@@ -10,7 +10,7 @@ export class UserService {
     //@Output() loggedIn = new EventEmitter<boolean>();
     loggedInStatus = false;
     @Output() loggedInEvent = new EventEmitter<boolean>();
-
+    @Output() cityStateChangedEvent = new EventEmitter<boolean>();
     constructor(private http: HttpClient) {}
 
     isAuthenticated() {
@@ -43,6 +43,11 @@ export class UserService {
 
         this.loggedInStatus = false;
         this.loggedInEvent.emit(this.loggedInStatus);
+    }
+
+    //city State changes
+    cityStateChanged() {
+        this.cityStateChangedEvent.emit(true);
     }
     // register user
     register(user: User) {

@@ -4,12 +4,18 @@
     <a class="btn btn-success btn-lg text-white">Patrons</a>
 </div>
 
-<!-- SEARCH -->
-<app-search></app-search>
 <!-- Bulletin Board -->
-<ng-template [ngIf]="isCityStateSet">
-    <app-bulletin-board ></app-bulletin-board>
-</ng-template>
+<app-bulletin-board *ngIf="isCityStateSet"></app-bulletin-board>
+<!-- OR INFO-->
 <div *ngIf="!isCityStateSet">
     this is info about givechain
+    
+    <h2> Step 1. Save Your City & State</h2>
+    <form>
+        <input type="text" placeholder="City">
+        <input type="text" placeholder="State">
+    </form>
+    <h2> Step 2. Browse Available Items</h2>
+    <h2> Step 3. Reserve a Food Item</h2>
+
 </div>

@@ -1,5 +1,9 @@
 <h1>List of Available Sticky Notes</h1>
 <div class="alert alert-warning" *ngIf="reservationWarning">You Already Have a Sticky Reserved. Please Redeem It First. Then You Can Reserve Food Items Again.</div>
+<div>
+    <p>Currently showing: {{city | uppercase}}, {{state | uppercase}}</p>
+    <button class="btn btn-sm btn-info" (click)="onLocEdit()">Edit Location</button>
+</div>
 <app-sticky 
     *ngFor="let sticky of stickies" 
     cardType="available" 

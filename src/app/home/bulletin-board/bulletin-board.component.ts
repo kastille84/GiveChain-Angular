@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 
 import { Sticky } from '../../models/sticky.model';
 import { StickyService } from '../../services/sticky.service';
 import { Subscription } from 'rxjs/Subscription';
+import { EventEmitter } from 'events';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-bulletin-board',
@@ -13,13 +15,15 @@ export class BulletinBoardComponent implements OnInit {
   @Input() stickies: Sticky[] = [];
   reservationWarning = false;
   canReserve = false;
+  city = '';
+  state = '';
   stickySubscription: Subscription;
 
-  constructor(private stickyService: StickyService) { }
+  constructor(private stickyService: StickyService, private userService: UserService) { }
 
   ngOnInit() {    
-    const city = localStorage.getItem('city');
-    const state = localStorage.getItem('state');
+    this.city = localStorage.getItem('city');
+    this.state = localStorage.getItem('state');
     const lsStickyId = (localStorage.getItem('reserved_id')? localStorage.getItem('reserved_id') : null;
     // set reservation warning
     if (lsStickyId) {
@@ -29,8 +33,8 @@ export class BulletinBoardComponent implements OnInit {
       this.reservationWarning = false;
       this.canReserve = true;
     }
-    
-    this.stickyService.retrieveFromServer(city, state);
+
+    this.stickyService.retrieveFromServer(this.city, this.state);
     this.stickyService.stickiesSet.subscribe( stickies => {
       let finalStickies = [];
       for (let i = 0; i < stickies.length; i++) {
@@ -81,6 +85,12 @@ export class BulletinBoardComponent implements OnInit {
         this.reservationWarning = false;
         this.canReserve = true;
       }
+  }
+
+  onLocEdit() {
+    localStorage.removeItem('city');
+    localStorage.removeItem('state');
+    this.userService.cityStateChanged();
   }
 
 }
