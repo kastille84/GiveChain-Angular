@@ -10,7 +10,6 @@ import { StickyService } from './../../services/sticky.service';
   styleUrls: ['./stickies-list.component.css']
 })
 export class StickiesListComponent implements OnInit, OnDestroy {
-  // #TODO - need property to hold stickies array
   stickies: Sticky[] = [];  
   stickySubscription: Subscription;
 

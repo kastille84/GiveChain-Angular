@@ -246,6 +246,7 @@ router.get('/sticky', (req, res) => {
             promise = User.find({city: city, state: state, url: restaurant}).populate('stickies').exec();
         } 
         promise.then( users => { 
+            console.log('users', users);
             if (users.length === 0) {                       
                     // doesn't match city and or state
                     return res.status(404).json({error: "Incorrect City/State Combination"});                             
@@ -375,9 +376,9 @@ router.patch('/sticky/edit/:id', authenticate, [
             });
 
 });
-    // # TODO - TEST 
+    // * Special case * not authenticated because it can be reserved by general public
     // Reserve Sticky 
-router.patch('/sticky/reserve/:id', authenticate, [
+router.patch('/sticky/reserve/:id', [
         check('reserved')
             .exists()
             .isBoolean()

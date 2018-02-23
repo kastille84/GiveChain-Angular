@@ -15,7 +15,9 @@ import { Sticky } from './../../models/sticky.model';
 export class StickyComponent implements OnInit, OnDestroy {
   @Input() cardType;
   @Input() sticky;
+  @Input() canReserve;
   @Output() stickyDeleted = new EventEmitter<boolean>();
+  @Output() stickyReserved = new EventEmitter<boolean>();
   isLoggedIn = false;
   reserveMode = false;
   editMode = false;
@@ -46,6 +48,10 @@ export class StickyComponent implements OnInit, OnDestroy {
       'message': new FormControl(this.sticky.message, Validators.required),
       'from': new FormControl(this.sticky.from, Validators.required)
     });
+
+    // check whether public (not logged in) can or cannot reserve anymore stickies
+    // this.setCanReserve();
+    // console.log('init', this.canReserve);
   }
 
 //  R E S E R V E 
@@ -54,10 +60,25 @@ export class StickyComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.errorMode = false;
   }
+  // setCanReserve() {
+  //   if (!this.isLoggedIn) {
+  //     const lsStickyId = (localStorage.getItem('reserved_id')) ? localStorage.getItem('reserved_id') : null;
+  //     if (lsStickyId === null) {
+  //       this.canReserve = true;
+  //     } else {
+  //       this.canReserve = false;
+  //     }
+  //   }
+  // }
+  // canReserveCheck() {
+  //   // reverse logic needed for disabled button
+  //   return !this.canReserve;
+  // }
   // change reserve sticky from db & frontend sticky list
   onReserveSet() {
     //validate
     if (this.reserveForm.status !== 'INVALID') {
+      
       const id = this.sticky._id;
       // update sticky on frontend & backend
       const name = this.reserveForm.controls['reserveBy'].value;      
@@ -68,16 +89,31 @@ export class StickyComponent implements OnInit, OnDestroy {
             if (stickyItem._id === id) {
               stickyItem.reserved = true;
               stickyItem.reservedBy = name;
-            }
+            }            
           });
           
-          this.flashMessagesService.show('Sticky Reserved Successfully!', {cssClass:'alert alert-success', timeout:2000})
-          
-          // navigate away
-          setTimeout(() => {
-            this.router.navigate(['/dashboard/reserved']);
+          if (this.isLoggedIn) {
+            this.flashMessagesService.show('Sticky Reserved Successfully!', {cssClass:'alert alert-success', timeout:2000})
 
-          }, 2500);
+            // navigate away
+            setTimeout(() => {
+              this.router.navigate(['/dashboard/reserved']);
+  
+            }, 2500);
+          } else {
+            this.flashMessagesService.show(`Sticky Reserved! Now, go Redeem it at ${this.sticky.user.name} !`,
+                                     {cssClass: 'alert alert-success', timeout: 3500})
+
+            // restrict reserving to one item until it's redeemed
+              // save sticky id in localStorage
+              localStorage.setItem('reserved_id', this.sticky._id);
+              // this.setCanReserve();
+              // console.log('reserved button clicked', this.canReserve);
+            //emit to homepage of new sticky array
+            setTimeout(() => {
+              this.stickyReserved.emit(true);
+            }, 4000);
+          }
         },
         error => {
           const stickyList = this.stickyService.getStickies();

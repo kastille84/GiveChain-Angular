@@ -50,8 +50,9 @@
       </div>
       <!-- L O G G E D  O U T-->
       <div *ngIf="!isLoggedIn" id="loggedOut">
-          <button class="btn btn-success" (click)="onReserveShow()">Reserve</button>
-          im logged out
+          <button class="btn btn-success btn-block" 
+                  (click)="onReserveShow()"
+                  [disabled]="!canReserve">Reserve</button>
       </div>
     </div>
   </article>

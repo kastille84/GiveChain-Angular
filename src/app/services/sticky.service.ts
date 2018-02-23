@@ -28,9 +28,10 @@ export class StickyService {
     // have users, need to construct
     let tempStickyArray = [];
     temp.subscribe( result => {
+      console.log('result', result);
       console.log('users', result.users);
         for(let i = 0; i < result.users.length; i++) {
-          for(let g = 0; g< result.users[i].stickies.length; g++) {
+          for(let g = 0; g < result.users[i].stickies.length; g++) {
              let obj = result.users[i].stickies[g];
               obj.user = {
                 _id: result.users[i]._id,
@@ -84,8 +85,12 @@ export class StickyService {
     }
     
     // reach out to the db, to update sticky
-    
-    return this.http.patch(this.url + 'sticky/reserve/' + id, newSticky, this.httpOptions);
+    const altHttpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+      })
+    };
+    return this.http.patch(this.url + 'sticky/reserve/' + id, newSticky, altHttpOptions);
   }
 
   redeem(id) {

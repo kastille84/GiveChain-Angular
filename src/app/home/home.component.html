@@ -7,5 +7,9 @@
 <!-- SEARCH -->
 <app-search></app-search>
 <!-- Bulletin Board -->
-<app-bulletin-board></app-bulletin-board>
-
+<ng-template [ngIf]="isCityStateSet">
+    <app-bulletin-board ></app-bulletin-board>
+</ng-template>
+<div *ngIf="!isCityStateSet">
+    this is info about givechain
+</div>
