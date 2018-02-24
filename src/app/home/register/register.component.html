@@ -1,6 +1,6 @@
 <section class="col-md-6 m-auto">
-  <h1>Register</h1>
-  <small>Already Registered? login</small>
+  <h1>Restaurant Register</h1>
+  <small>Already Registered? <a routerLink="/login">Login</a></small>
   <hr>
   <flash-messages></flash-messages>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
@@ -57,7 +57,7 @@
           formControlName="name"
           placeholder="Restaurant Name" >
     </div>
-    <div class="form-group">
+    <!-- <div class="form-group">
         <div class="alert alert-danger" 
           *ngIf="registerForm.controls['url'].errors && !registerForm.controls['url'].untouched">
         <div [hidden]="!registerForm.controls['url'].errors.required">Restaurant Url is required.</div>
@@ -70,7 +70,7 @@
               formControlName="url"
               placeholder="RosasPizza123" >
         
-    </div>
+    </div> -->
     <div class="form-group">
         <div class="alert alert-danger" 
           *ngIf="registerForm.controls['address'].errors && !registerForm.controls['address'].untouched">

@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
                   Validators.email]),
         'password': new FormControl(null, Validators.required),
         'name': new FormControl(null, Validators.required),
-        'url': new FormControl(null, Validators.required),
+        //'url': new FormControl(null, Validators.required),
         'address': new FormControl(null, Validators.required),
         'city': new FormControl(null, Validators.required),
         'state': new FormControl(null, [
@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
           this.registerForm.value.email,
           this.registerForm.value.password,
           this.registerForm.value.name,
-          this.registerForm.value.url,
+          //this.registerForm.value.url,
           this.registerForm.value.address,
           this.registerForm.value.city,
           this.registerForm.value.state,

@@ -16,8 +16,8 @@ export class DashboardComponent implements OnInit {
     // get the stickies from server
     const city = localStorage.getItem('city');
     const state = localStorage.getItem('state');
-    const url = localStorage.getItem('url')
-    this.stickyService.retrieveFromServer(city, state, url);
+    const name = localStorage.getItem('name');
+    this.stickyService.retrieveFromServer(city, state, name);
   }
 
 }

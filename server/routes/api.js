@@ -73,9 +73,9 @@ router.post('/register',[
         check("name")
             .exists()
             .trim(),
-        check("url")
-            .exists()
-            .trim(),
+        // check("url")
+        //     .exists()
+        //     .trim(),
         check("address")
             .exists()
             .trim(),
@@ -109,7 +109,7 @@ router.post('/register',[
             "email": (req.body.email).toLowerCase(),
             "password": hash,
             "name": req.body.name,
-            "url": (req.body.url).toLowerCase(),
+            //"url": (req.body.url).toLowerCase(),
             "address": req.body.address,
             "city": (req.body.city).toLowerCase(),
             "state": (req.body.state).toLowerCase(),
@@ -213,7 +213,7 @@ router.post('/login', [
                             expiresAt: new Date().getTime() + 7200000,
                             city: user.city,
                             state: user.state,
-                            url: user.url
+                            name: user.name
                         });
                 }
 
@@ -243,7 +243,8 @@ router.get('/sticky', (req, res) => {
             promise = User.find({city: city, state: state}).populate('stickies').exec();
         }
         else if (restaurant) {
-            promise = User.find({city: city, state: state, url: restaurant}).populate('stickies').exec();
+            promise = User.find({city: city, state: state, name: new RegExp(restaurant, 'i')})
+                        .populate('stickies').exec();
         } 
         promise.then( users => { 
             console.log('users', users);
@@ -269,7 +270,7 @@ router.get('/sticky', (req, res) => {
     }   
 });
 
-    // #TODO - SEARCH ROUTE to get All Stickies by Search Criteria
+    
 
 // Routes below protected using jwt
 

@@ -18,12 +18,12 @@ export class StickyService {
 
   constructor(private http: HttpClient) { }
 
-  retrieveFromServer(city, state, url?) {
+  retrieveFromServer(city, state, search?) {
     let temp;
-    if (!url) {
+    if (!search) {
       temp = this.http.get(this.url + `sticky?city=${city}&state=${state}`);
     } else {
-      temp = this.http.get(this.url + `sticky?city=${city}&state=${state}&restaurant=${url}`);
+      temp = this.http.get(this.url + `sticky?city=${city}&state=${state}&restaurant=${search}`);
     }
     // have users, need to construct
     let tempStickyArray = [];

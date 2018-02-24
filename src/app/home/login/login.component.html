@@ -1,6 +1,6 @@
 <section class="col-md-6 m-auto">
-  <h1>Login</h1>
-  <small>Are you a New Restaurant? Register</small>
+  <h1>Restaurant Login</h1>
+  <small>Are you a New Restaurant? <a routerLink="/register">Register</a></small>
   <flash-messages></flash-messages>
   <hr>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>    

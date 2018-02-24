@@ -25,6 +25,11 @@ export class LoginComponent implements OnInit {
         username: new FormControl(null, Validators.required),
         password: new FormControl(null, Validators.required)
     });
+    if (!localStorage.getItem('verified')) {
+      this.flashMessagesService
+          .show('We emailed you with instructions to proceed. Afterwards, Come back and Login to finalize Verification', 
+                {cssClass: 'alert alert-info', timeout: 6000});
+    }
   }
 
   onSubmit() {
@@ -40,7 +45,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('expiresAt', data['expiresAt']);
                 localStorage.setItem('city', data['city']);
                 localStorage.setItem('state', data['state']);
-                localStorage.setItem('url', data['url']);
+                localStorage.setItem('name', data['name']);
                 localStorage.setItem('verified', 'true');
 
                 //user userService to hold a login status
