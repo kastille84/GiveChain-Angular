@@ -11,9 +11,17 @@
     this is info about givechain
     
     <h2> Step 1. Save Your City & State</h2>
-    <form>
-        <input type="text" placeholder="City">
-        <input type="text" placeholder="State">
+    <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="form-inline">
+        <input type="text" 
+            class="form-control mr-3"
+            placeholder="City"
+            formControlName="city">
+        <input type="text" 
+            class="form-control mr-2"
+            placeholder="State"
+            maxlength="2"
+            formControlName="state">
+        <button class="btn btn-success">Set</button>
     </form>
     <h2> Step 2. Browse Available Items</h2>
     <h2> Step 3. Reserve a Food Item</h2>
