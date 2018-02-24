@@ -63,7 +63,10 @@ export class BulletinBoardComponent implements OnInit {
         }
       }
       this.stickies = finalStickies;
+      // shuffle stickies    
+      this.stickies = this.stickies.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1]);
     });
+
 
   }
 
@@ -77,6 +80,8 @@ export class BulletinBoardComponent implements OnInit {
         }
       }
       this.stickies = finalStickies;
+      this.stickies = this.stickies.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1]);
+
       const lsStickyId = (localStorage.getItem('reserved_id')? localStorage.getItem('reserved_id') : null;
       if (lsStickyId) {
         this.reservationWarning = true;

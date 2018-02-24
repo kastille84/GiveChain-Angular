@@ -301,14 +301,15 @@ router.post('/sticky', authenticate, [
         const id = req.decoded.id;
         const newFrom = (req.body.from === null)? 'Anonymous': req.body.from;
         const newMessage = (req.body.message)? req.body.message: "I give you this food item as an act of Kindness. May you also spread love and kindness to others.";
-        console.log('newfrom', req.body.from);
-        console.log('user_id', id);
+        const colorArray = ['#C1FAF3', '#FAF681', '#FAD0CF'];
+        const key = getRandomInt(3);
             // currently we are just grabbing the 1st user on the collection     
         User.findOne({_id: id}).then((doc) => {              
                 const sticky = new Sticky({
                     "title": req.body.title,
                     "message": newMessage, 
                     "from":newFrom ,
+                    "color": colorArray[key],
                     "user": doc._id
                 });
             
@@ -460,7 +461,10 @@ router.delete('/sticky/:id', authenticate, (req, res) => {
 
 });
 
-
+// random
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
     // *** sample route: localhost:3000/api/users
 //  router.get('/users', (req, res) => {
 //     var user = new User({

@@ -33,6 +33,10 @@ const schema = mongoose.Schema({
         type: Date,
         default: null
     },
+    color: {
+        type: String,
+        default: null
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

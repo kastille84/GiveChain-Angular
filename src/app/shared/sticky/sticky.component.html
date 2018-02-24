@@ -2,6 +2,7 @@
 <ng-template [ngIf]="!reserveMode && !editMode">
   <article 
     class="sticky card text-center m-4 align-top"
+    [ngStyle]="{'background': sticky.color}"
     >
     <div class="card-body">
       <div class="alert alert-danger prompt" *ngIf="(cardType==='redeemed' || cardType==='available') && deletePrompt===true">
@@ -50,7 +51,7 @@
       </div>
       <!-- L O G G E D  O U T-->
       <div *ngIf="!isLoggedIn" id="loggedOut">
-          <button class="btn btn-success btn-block" 
+          <button class="btn btn-info btn-block" 
                   (click)="onReserveShow()"
                   [disabled]="!canReserve">Reserve</button>
       </div>

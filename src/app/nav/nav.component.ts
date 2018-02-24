@@ -27,8 +27,8 @@ export class NavComponent implements OnInit, DoCheck {
     this.userService.setLogout();
     localStorage.removeItem('expiresAt');
     localStorage.removeItem('token');
-    localStorage.removeItem('url');
-    localStorage.removeItem('verified');
+    //localStorage.removeItem('url');
+    //localStorage.removeItem('verified');
     // redirect to Login page
     this.router.navigate(['/login']);
   }
