@@ -28,6 +28,8 @@ import { StickiesReservedComponent } from './dashboard/stickies-reserved/stickie
 import { StickiesRedeemedComponent } from './dashboard/stickies-redeemed/stickies-redeemed.component';
 import { StickyComponent } from './shared/sticky/sticky.component';
 import { StickyCreateComponent } from './dashboard/sticky-create/sticky-create.component';
+import { ChangePasswordComponent } from './home/change-password/change-password.component';
+import { NewPasswordComponent } from './home/new-password/new-password.component';
 
 
 @NgModule({
@@ -45,7 +47,9 @@ import { StickyCreateComponent } from './dashboard/sticky-create/sticky-create.c
     StickiesReservedComponent,
     StickiesRedeemedComponent,
     StickyComponent,
-    StickyCreateComponent
+    StickyCreateComponent,
+    ChangePasswordComponent,
+    NewPasswordComponent
   ],
   imports: [
     BrowserModule,

@@ -75,5 +75,24 @@ export class UserService {
 
         return this.http.post(this.url + 'login', credentials, httpOptions);
     }
+    // pulls up change password form
+    changePassword(email) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+                // auth: 'my-token'
+            })
+        };
+        return this.http.post(this.url + 'changePassword', {email}, httpOptions);
+    }
+    // sets the password
+    setNewPassword(id, hash, password) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post(this.url + 'newPassword', {id, hash, password}, httpOptions);
+    }
 
 }

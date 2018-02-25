@@ -229,6 +229,101 @@ router.post('/login', [
         });
 });
 
+// Emails the User
+router.post('/changePassword', [
+        check('email')
+            .exists()
+            .trim()
+            .isEmail()
+    ], (req, res) => {
+     // check validity of values        
+     const result = validationResult(req);
+     if (!result.isEmpty()) {
+         // there are validation errors               
+         return res.status(400).json({errors: "something went wrong"});
+     }
+     
+    User.findOne({email: req.body.email}).exec()
+        .then(user => {
+            // email user
+             // NODE MAILER
+             const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                host: 'smtp.gmail.com',
+                auth: {
+                    user: email,
+                    pass: pemail
+                }
+            });
+            // setting up the data to send off
+            //#TODO - change localhost url in html to reflect production email
+            const mailOptions = {
+                from: `"Edwin at GiveChain" <${email}> `,
+                to: req.body.email,
+                subject: "GiveChain Password Change",
+                html: "<h2>Hey " + user.name + "</h2><h3>You forgot your password?</h3><p>No worries. We will help you create a new password. </p><p>Please click on the link below to change password</p><br><a href='" + urlEnv+"api/newPassword/"+user._id+"/"+user.verifyHash+"'>CLICK HERE</a>"
+            };
+            // send mail
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) return console.log("nodemailer", err);
+                
+                return res.status(200).json({
+                    message: "email sent"
+                }); 
+            });
+        })
+        .catch(e => {
+            return res.status(500).json({error: "Could not find email in our records"})
+        })
+
+})
+    // Email Change Password Form
+router.get('/newPassword/:id/:hash', (req, res) => {
+    const id = req.params['id'];
+    const hash = req.params['hash'];
+
+    User.findOne({_id: id, verifyHash: hash}).exec()
+        .then( user => {
+            res.redirect(urlEnv+'newPassword/e8ekhgy29ieyhwpaiuw3iywok/'+id+'/asgw5r9483hjirus/'+hash);
+        })
+        .catch( e=> {
+            return res.status(500).json({error: "Could not find email in our records"})
+        })
+})
+    //Actual Change Password
+router.post('/newPassword', [
+        check('id')
+            .exists()
+            .trim(),
+        check('hash')
+            .exists()
+            .trim(),
+        check('password')
+            .isAlphanumeric()
+            .exists()
+            .isLength({min:5})
+            .trim()
+    ], (req, res) => {
+        // check validity of values        
+     const result = validationResult(req);
+     if (!result.isEmpty()) {
+         // there are validation errors               
+         return res.status(400).json({errors: "something went wrong"});
+     }
+     const id = req.body.id;
+     const hash = req.body.hash;
+     // hash password before saving
+     const salt = bcrypt.genSaltSync(10);
+     var newPassword = bcrypt.hashSync( (req.body.password).toLowerCase(), salt);
+
+     User.findOneAndUpdate({_id: id, verifyHash: hash}, {password: newPassword}).exec()
+            .then(result =>{
+                return res.status(200).json({success: 'changed password'});
+            })
+            .catch(e => {
+                return res.status(500).json({error: 'Could Not Find User Or Change Password'});
+            })
+});
     // Get All Stickies - by setting city/state in Local Storage OR restaurant URL
 router.get('/sticky', (req, res) => {
     // ?city=newburgh&state=ny
@@ -247,7 +342,6 @@ router.get('/sticky', (req, res) => {
                         .populate('stickies').exec();
         } 
         promise.then( users => { 
-            console.log('users', users);
             if (users.length === 0) {                       
                     // doesn't match city and or state
                     return res.status(404).json({error: "Incorrect City/State Combination"});                             
