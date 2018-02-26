@@ -12,7 +12,7 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./bulletin-board.component.css']
 })
 export class BulletinBoardComponent implements OnInit {
-  @Input() stickies: Sticky[] = [];
+  @Input() stickies: any[] = [];
   reservationWarning = false;
   canReserve = false;
   city = '';
@@ -24,7 +24,7 @@ export class BulletinBoardComponent implements OnInit {
   ngOnInit() {    
     this.city = localStorage.getItem('city');
     this.state = localStorage.getItem('state');
-    const lsStickyId = (localStorage.getItem('reserved_id')? localStorage.getItem('reserved_id') : null;
+    const lsStickyId = (localStorage.getItem('reserved_id'))? localStorage.getItem('reserved_id') : null;
     // set reservation warning
     if (lsStickyId) {
       this.reservationWarning = true;

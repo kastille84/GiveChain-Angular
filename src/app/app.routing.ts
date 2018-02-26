@@ -9,6 +9,7 @@ import { StickiesRedeemedComponent } from './dashboard/stickies-redeemed/stickie
 import { StickyCreateComponent } from './dashboard/sticky-create/sticky-create.component';
 import { ChangePasswordComponent } from './home/change-password/change-password.component';
 import { NewPasswordComponent } from './home/new-password/new-password.component';
+import { ContactComponent } from './home/contact/contact.component';
 
 import { AuthGuard } from './services/auth-guard.service';
 
@@ -17,6 +18,7 @@ const appRoutes: Routes = [
     {path: 'home', component: HomeComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'login', component: LoginComponent},
+    {path: 'contact', component: ContactComponent},
     {path: 'changePassword', component: ChangePasswordComponent},
     {path: 'newPassword/:t1/:id/:t2/:hash', component: NewPasswordComponent},
     {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], children: [        

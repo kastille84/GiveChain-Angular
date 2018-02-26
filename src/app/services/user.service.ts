@@ -7,10 +7,17 @@ import { User } from '../models/user.model';
 @Injectable()
 export class UserService {
     url = 'http://localhost:3000/api/';
-    //@Output() loggedIn = new EventEmitter<boolean>();
+
     loggedInStatus = false;
     @Output() loggedInEvent = new EventEmitter<boolean>();
     @Output() cityStateChangedEvent = new EventEmitter<boolean>();
+    httpOptions = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json'
+            // auth: 'my-token'
+        })
+    };
+
     constructor(private http: HttpClient) {}
 
     isAuthenticated() {
@@ -21,7 +28,7 @@ export class UserService {
         //     return false;
         // }
         const expiresAt = localStorage.getItem('expiresAt');
-        if (!expiresAt 
+        if (!expiresAt
             || +expiresAt < new Date().getTime()) {
                 this.setLogout();
                 return false;
@@ -45,19 +52,14 @@ export class UserService {
         this.loggedInEvent.emit(this.loggedInStatus);
     }
 
-    //city State changes
+    // city State changes
     cityStateChanged() {
         this.cityStateChangedEvent.emit(true);
     }
     // register user
     register(user: User) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-                // auth: 'my-token'
-            })
-        };
-        return this.http.post(this.url + 'register', user, httpOptions);       
+
+        return this.http.post(this.url + 'register', user, this.httpOptions);
     }
 
     login(username, password) {
@@ -66,33 +68,20 @@ export class UserService {
             password: password
         };
 
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-                // auth: 'my-token'
-            })
-        };
-
-        return this.http.post(this.url + 'login', credentials, httpOptions);
+        return this.http.post(this.url + 'login', credentials, this.httpOptions);
     }
     // pulls up change password form
     changePassword(email) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-                // auth: 'my-token'
-            })
-        };
-        return this.http.post(this.url + 'changePassword', {email}, httpOptions);
+        return this.http.post(this.url + 'changePassword', {email}, this.httpOptions);
     }
     // sets the password
     setNewPassword(id, hash, password) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-        return this.http.post(this.url + 'newPassword', {id, hash, password}, httpOptions);
+        return this.http.post(this.url + 'newPassword', {id, hash, password}, this.httpOptions);
+    }
+
+    contact(subject, message, email) {
+
+        return this.http.post(this.url + 'contact', {subject, message, email}, this.httpOptions);
     }
 
 }

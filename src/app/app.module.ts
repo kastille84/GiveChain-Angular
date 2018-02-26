@@ -30,6 +30,7 @@ import { StickyComponent } from './shared/sticky/sticky.component';
 import { StickyCreateComponent } from './dashboard/sticky-create/sticky-create.component';
 import { ChangePasswordComponent } from './home/change-password/change-password.component';
 import { NewPasswordComponent } from './home/new-password/new-password.component';
+import { ContactComponent } from './home/contact/contact.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { NewPasswordComponent } from './home/new-password/new-password.component
     StickyComponent,
     StickyCreateComponent,
     ChangePasswordComponent,
-    NewPasswordComponent
+    NewPasswordComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,

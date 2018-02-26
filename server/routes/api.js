@@ -324,6 +324,54 @@ router.post('/newPassword', [
                 return res.status(500).json({error: 'Could Not Find User Or Change Password'});
             })
 });
+
+router.post('/contact', [
+        check('subject')
+            .exists()
+            .trim(),
+        check('message')
+            .exists()
+            .trim(),
+        check('email')
+            .exists()
+            .trim()
+            .isEmail()
+    ], (req, res) => {
+       // check validity of values        
+       const result = validationResult(req);
+       if (!result.isEmpty()) {
+           // there are validation errors               
+           return res.status(400).json({errors: "something went wrong"});
+       }
+
+       // NODEMAILER
+       const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            auth: {
+                user: email,
+                pass: pemail
+            }
+        });
+       // setting up the data to send off
+        //#TODO - change localhost url in html to reflect production email
+        const mailOptions = {
+            from: `"Inquiry" <${req.body.email}> `,
+            to: email,
+            subject: req.body.subject,
+            html: "<h2>Hey GiveChain Representative, </h2><h3>You have a new Inquiry from : <br> "+req.body.email+"</h3><p>Message:</p>"+req.body.message+"<p>"
+        };
+        // send mail
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) return console.log("nodemailer", err);
+            
+            return res.status(200).json({
+                message: "email sent"
+            }); 
+        });
+
+});
+
     // Get All Stickies - by setting city/state in Local Storage OR restaurant URL
 router.get('/sticky', (req, res) => {
     // ?city=newburgh&state=ny
