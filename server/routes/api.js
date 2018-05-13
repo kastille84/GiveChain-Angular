@@ -199,6 +199,7 @@ router.post('/login', [
                 if (err) {
                     return res.status(500).json({errors: err});
                 }
+                console.log(same);
                 // same is true
                 if (same) {
                     // passwords match
@@ -215,12 +216,13 @@ router.post('/login', [
                             state: user.state,
                             name: user.name
                         });
+                } else {
+                    //failed login, bad credentials
+                    res.status(403).json({
+                        message:"Auth Failed"
+                    });
                 }
 
-                //failed login, bad credentials
-                res.status(403).json({
-                    message:"Auth Failed"
-                });
             })
         })
         .catch(e=> {

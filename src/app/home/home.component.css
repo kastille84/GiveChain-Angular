@@ -11,7 +11,8 @@
     text-align: center;
 }
 
-.infoWrapper form button, .infoWrapper form input {
+.infoWrapper form button, 
+.infoWrapper form input {
     text-align: center;
     margin-top: 10px;
 }
