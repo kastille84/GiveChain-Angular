@@ -4,6 +4,7 @@
     display: inline-block;
     /* height: 361px; */
     height: 385px;
+    margin-top: 20px;
 }
 .sticky .message {
     height: 120px;
@@ -34,4 +35,25 @@ flash-messages, .prompt {
 }
 .alert {
     margin:0;
+}
+
+/* TABLET && LARGE SMARTPHONES */
+@media screen and (min-width: 481px ) and (max-width: 768px) {
+    .sticky {
+        margin-right: 10px;
+    }
+}
+/* LAPTOPS && TABLET in Landscape */
+@media screen and (min-width: 769px ) and (max-width: 1024px) {
+    .sticky {
+        margin-right: 10px;
+    }
+    
+}
+/* LARGE DESKTOPS */
+@media screen and (min-width: 1025px ) and (max-width: 1600px) {
+    .sticky {
+        margin-right: 10px;
+    }
+
 }
