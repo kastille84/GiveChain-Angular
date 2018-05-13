@@ -1,4 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-    padding-top: 70px;
+    padding-top: 55px;
+}
+
+/* TABLET && LARGE SMARTPHONES */
+@media screen and (min-width: 481px ) and (max-width: 768px) {
+
+}
+/* LAPTOPS && TABLET in Landscape */
+@media screen and (min-width: 769px ) and (max-width: 1024px) {
+
+}
+/* LARGE DESKTOPS */
+@media screen and (min-width: 1025px ) and (max-width: 1600px) {
+
+
 }

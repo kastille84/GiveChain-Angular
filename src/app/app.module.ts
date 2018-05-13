@@ -31,6 +31,7 @@ import { StickyCreateComponent } from './dashboard/sticky-create/sticky-create.c
 import { ChangePasswordComponent } from './home/change-password/change-password.component';
 import { NewPasswordComponent } from './home/new-password/new-password.component';
 import { ContactComponent } from './home/contact/contact.component';
+import { AboutComponent } from './home/about/about.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { ContactComponent } from './home/contact/contact.component';
     StickyCreateComponent,
     ChangePasswordComponent,
     NewPasswordComponent,
-    ContactComponent
+    ContactComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

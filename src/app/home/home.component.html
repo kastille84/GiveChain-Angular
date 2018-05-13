@@ -6,23 +6,26 @@
 <!-- Bulletin Board -->
 <app-bulletin-board *ngIf="isCityStateSet"></app-bulletin-board>
 <!-- OR INFO-->
-<div *ngIf="!isCityStateSet">
-    this is info about givechain
-    
-    <h2> Step 1. Save Your City & State</h2>
+<div *ngIf="!isCityStateSet" class="infoWrapper">    
+    <h2> Step 1. </h2> 
+    <h5>Save Your City & State</h5>
     <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="form-inline">
         <input type="text" 
-            class="form-control mr-3"
+            class="form-control"
             placeholder="City"
             formControlName="city">
         <input type="text" 
-            class="form-control mr-2"
+            class="form-control"
             placeholder="State"
             maxlength="2"
             formControlName="state">
-        <button class="btn btn-success">Set</button>
+        <button class="btn btn-success">Set Your Location</button>
     </form>
-    <h2> Step 2. Browse Available Items</h2>
-    <h2> Step 3. Reserve a Food Item</h2>
+    <hr>
+    <h2> Step 2.</h2> 
+    <h5>Browse Available Items</h5>
+    <hr>
+    <h2> Step 3.</h2> 
+    <h5>Reserve a Food Item</h5>
 
 </div>

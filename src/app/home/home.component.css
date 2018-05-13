@@ -1,0 +1,17 @@
+
+.jumbotron a {
+    margin: auto;
+}
+
+.infoWrapper {
+    width: 90%;
+    margin: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+}
+
+.infoWrapper form button, .infoWrapper form input {
+    text-align: center;
+    margin-top: 10px;
+}
