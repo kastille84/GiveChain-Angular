@@ -1,6 +1,6 @@
 .sticky {
     width: 20%;
-    min-width: 314px;
+    min-width: 250px;
     display: inline-block;
     /* height: 361px; */
     height: 385px;
@@ -41,12 +41,14 @@ flash-messages, .prompt {
 @media screen and (min-width: 481px ) and (max-width: 768px) {
     .sticky {
         margin-right: 10px;
+        min-width: 314px;
     }
 }
 /* LAPTOPS && TABLET in Landscape */
 @media screen and (min-width: 769px ) and (max-width: 1024px) {
     .sticky {
         margin-right: 10px;
+        min-width: 314px;
     }
     
 }
@@ -54,6 +56,7 @@ flash-messages, .prompt {
 @media screen and (min-width: 1025px ) and (max-width: 1600px) {
     .sticky {
         margin-right: 10px;
+        min-width: 314px;
     }
 
 }

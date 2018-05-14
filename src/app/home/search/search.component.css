@@ -2,14 +2,25 @@
 
 /* TABLET && LARGE SMARTPHONES */
 @media screen and (min-width: 481px ) and (max-width: 768px) {
+    form input {
+        width: 60%;
+        margin: auto;
+    }
 
 }
 /* LAPTOPS && TABLET in Landscape */
 @media screen and (min-width: 769px ) and (max-width: 1024px) {
-
+    form input {
+        width: 60%;
+        margin: auto;
+    }
 }
 /* LARGE DESKTOPS */
 @media screen and (min-width: 1025px ) and (max-width: 1600px) {
+    form input {
+        width: 40%;
+        margin: auto;
+    }
 
 
 }
