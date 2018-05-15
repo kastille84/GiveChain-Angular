@@ -1,36 +1,36 @@
-<h1>Create a Sticky Note</h1>
-<div class="row">
-  <div class="col-6 offset-2">
-    <flash-messages></flash-messages>
-    <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="">Food Item</label>
-        <input type="text"
-              class="form-control"
-              placeholder="Bacon Egg & Cheese Sandwich"
-              maxlength="40"
-              formControlName="title"
-          >
-      </div>
-      <div class="form-group">
-        <label for="">Customer Message to Recepient</label>
-        <textarea         
-            class="form-control"
-            rows="4"
-            maxlength="130"
-            formControlName="message"></textarea>
-      </div>
-      <div class="form-group">
-          <label for="">Customers Name</label><br>
+<section>
+  <h1>Create a Sticky Note</h1>
+  <div class="row createSticky">
+      <flash-messages></flash-messages>
+      <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="">Food Item</label>
           <input type="text"
-          class="form-control"
-          placeholder="Anonymous"
-          maxlength="40"
-          formControlName="from"
-          >
-          <small class="text-muted">Leave Blank for Anonymous</small>
-      </div>
-      <button class="btn btn-success">Create</button>
-    </form>
-  </div>
-<div>
+                class="form-control"
+                placeholder="Bacon Egg & Cheese Sandwich"
+                maxlength="40"
+                formControlName="title"
+            >
+        </div>
+        <div class="form-group">
+          <label for="">Customer Message to Recepient</label>
+          <textarea         
+              class="form-control"
+              rows="4"
+              maxlength="130"
+              formControlName="message"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="">Customers Name</label><br>
+            <input type="text"
+            class="form-control"
+            placeholder="Anonymous"
+            maxlength="40"
+            formControlName="from"
+            >
+            <small class="text-muted">Leave Blank for Anonymous</small>
+        </div>
+        <button class="btn btn-success">Create</button>
+      </form>
+    </div>
+</section>

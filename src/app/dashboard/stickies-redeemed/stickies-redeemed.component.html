@@ -1,2 +1,14 @@
-<h1>List of Redeemed Sticky Notes</h1>
-<app-sticky *ngFor="let sticky of stickies" cardType="redeemed" [sticky]="sticky"></app-sticky>
+<section>
+    <h1>List of Redeemed Sticky Notes</h1>
+    <hr>
+    <div *ngIf="stickies.length === 0">
+        <h3 class="noStickies">No Food Item Stickies Have Been Made Yet. </h3>
+        <div>
+            <a routerLink="/dashboard/create"
+                class="btn btn-lg btn-primary"
+            >Create a Food Item Sticky</a>
+        </div>
+    </div>
+    <app-sticky *ngFor="let sticky of stickies" cardType="redeemed" [sticky]="sticky"></app-sticky>
+
+</section>
