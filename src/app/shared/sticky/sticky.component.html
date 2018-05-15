@@ -62,7 +62,7 @@
 <!-- ReserveMode -->
 <ng-template [ngIf]="reserveMode && !editMode">
   <article 
-    class="sticky card text-center m-4 align-top"
+    [ngClass]="stickyClass"
     >
     <div class="card-body">
       <flash-messages></flash-messages>
@@ -99,7 +99,7 @@
 <!-- Edit Mode -->
 <ng-template [ngIf]="editMode && !reserveMode">
   <article 
-    class="sticky card text-center m-4 align-top"
+    [ngClass]="stickyClass"
     >
     <div class="card-body">
         <flash-messages></flash-messages>

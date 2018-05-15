@@ -6,14 +6,14 @@
     height: 385px;
     margin-top: 20px;
 }
-.sticky .message {
+.sticky .message, .stickyLoggedIn .message {
     height: 120px;
 }
 
-.sticky h5 {
+.sticky h5, .stickyLoggedIn h5 {
     height: 48px;
 }
-.sticky p {
+.sticky p, .stickyLoggedIn p {
     height: 120px;
 }
 input.ng-touched.ng-invalid {
@@ -38,6 +38,9 @@ flash-messages, .prompt {
 }
 
 .stickyLoggedIn {
+    display: inline-block;
+    /* height: 361px; */
+    height: 385px;
     width: 300px;
     margin: auto;
 }
