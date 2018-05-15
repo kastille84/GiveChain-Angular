@@ -1,3 +1,28 @@
+section {
+    background-color: whitesmoke;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 30px auto;
+    max-width: 650px;
+    text-align: center;
+    width: 90%;
+}
+
 input.ng-touched.ng-invalid{
     border-color: red; 
+}
+
+
+/* TABLET && LARGE SMARTPHONES */
+@media screen and (min-width: 481px ) and (max-width: 768px) {
+
+}
+/* LAPTOPS && TABLET in Landscape */
+@media screen and (min-width: 769px ) and (max-width: 1024px) {
+
+}
+/* LARGE DESKTOPS */
+@media screen and (min-width: 1025px ) and (max-width: 1600px) {
+
+
 }

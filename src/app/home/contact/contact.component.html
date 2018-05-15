@@ -1,26 +1,29 @@
-<h1>Have a Question?</h1>
-<flash-messages></flash-messages>
-<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <label>Subject</label>
-        <input type="text"
-            class="form-control"
-            formControlName="subject"
-        >
-    </div>
-    <div class="form-group">
-        <label>Message</label>
-        <textarea 
-            rows="10"
-            class="form-control"
-            formControlName="message" ></textarea>
-    </div>
-    <div class="form-group">
-        <label>Your Email</label>
-        <input type="email"
-            class="form-control"
-            formControlName="email"
-        >
-    </div>
-    <button class="btn btn-primary">Send</button>
-</form>
+<div class="contact">
+    <h1>Have a Question?</h1>
+    <flash-messages></flash-messages>
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label>Subject</label>
+            <input type="text"
+                class="form-control"
+                formControlName="subject"
+            >
+        </div>
+        <div class="form-group">
+            <label>Message</label>
+            <textarea 
+                rows="10"
+                class="form-control"
+                formControlName="message" ></textarea>
+        </div>
+        <div class="form-group">
+            <label>Your Email</label>
+            <input type="email"
+                class="form-control"
+                formControlName="email"
+            >
+        </div>
+        <button class="btn btn-primary">Send</button>
+    </form>
+
+</div>

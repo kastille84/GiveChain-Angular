@@ -1,0 +1,13 @@
+.contact {
+    border: 1px solid #ccc;
+    background-color: whitesmoke;
+    padding: 20px;
+    width: 90%;
+    max-width: 650px;
+    text-align: center;
+    margin: 30px auto;
+}
+
+.contact form {
+    margin-top: 40px;    
+}

@@ -1,4 +1,6 @@
-
+nav {
+    background-color: #176fc5;
+}
 
 /* TABLET && LARGE SMARTPHONES */
 @media screen and (min-width: 481px ) and (max-width: 768px) {
