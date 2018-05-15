@@ -37,6 +37,10 @@ flash-messages, .prompt {
     margin:0;
 }
 
+.stickyLoggedIn {
+    width: 300px;
+    margin: auto;
+}
 /* TABLET && LARGE SMARTPHONES */
 @media screen and (min-width: 481px ) and (max-width: 768px) {
     .sticky {

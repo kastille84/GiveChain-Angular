@@ -24,7 +24,13 @@ export class StickyComponent implements OnInit, OnDestroy {
   errorMode = false;
   errorMessage = '';
   deletePrompt = false;
-
+  stickyClass = {
+    'sticky': true,
+    'stickyLoggedIn': false,
+    'card': true,
+    'text-center': true,
+    'align-top': true
+  };
   stickySub: Subscription;
 
   reserveForm: FormGroup;
@@ -48,6 +54,15 @@ export class StickyComponent implements OnInit, OnDestroy {
       'message': new FormControl(this.sticky.message, Validators.required),
       'from': new FormControl(this.sticky.from, Validators.required)
     });
+    // apply appropriate class
+    if (this.isLoggedIn) {
+      this.stickyClass.sticky = false;
+      this.stickyClass.stickyLoggedIn = true;
+    } else {
+      this.stickyClass.sticky = true;
+      this.stickyClass.stickyLoggedIn = false;
+
+    }
 
     // check whether public (not logged in) can or cannot reserve anymore stickies
     // this.setCanReserve();

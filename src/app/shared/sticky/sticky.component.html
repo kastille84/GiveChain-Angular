@@ -1,7 +1,7 @@
 <!-- Default Mode -->
 <ng-template [ngIf]="!reserveMode && !editMode">
   <article 
-    class="sticky card text-center align-top"
+    [ngClass]="stickyClass"
     [ngStyle]="{'background': sticky.color}"
     >
     <div class="card-body">
