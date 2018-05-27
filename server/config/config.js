@@ -1,7 +1,7 @@
-const tks = "jquizzie";
-const email = 'givechain84@gmail.com';
-const pemail = 'ha2vu486';
-const urlEnv = "http://localhost:3000/";
+const tks = process.env.TKS;
+const email = process.env.EMAIL;
+const pemail = process.env.PASSWORD;
+const urlEnv = "https://fast-tundra-56510.herokuapp.com/";
 
 module.exports = {
     tks,

@@ -6,7 +6,7 @@ import { Sticky } from './../models/sticky.model';
 
 @Injectable()
 export class StickyService {
-  url = 'http://localhost:3000/api/';
+  url = 'https://fast-tundra-56510.herokuapp.com/api/';
   stickies: Sticky[] = [];
   @Output() stickiesSet = new EventEmitter<Sticky[]>();
   httpOptions = {

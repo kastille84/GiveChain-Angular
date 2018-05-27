@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 
 @Injectable()
 export class UserService {
-    url = 'http://localhost:3000/api/';
+    url = 'https://fast-tundra-56510.herokuapp.com/api/';
 
     loggedInStatus = false;
     @Output() loggedInEvent = new EventEmitter<boolean>();

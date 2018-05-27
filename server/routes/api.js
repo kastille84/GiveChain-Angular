@@ -14,7 +14,8 @@ const User = require('../models/user');
 const Sticky = require('../models/sticky');
 const {tks, email, pemail, urlEnv} = require('../config/config');
 
-mongoose.connect('mongodb://localhost:27017/givechain');
+// mongoose.connect('mongodb://localhost:27017/givechain');
+mongoose.connect(process.env.MONGODB_URI);
 mongoose.Promise= global.Promise;
 
 // Response handling

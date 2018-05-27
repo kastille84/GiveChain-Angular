@@ -40,7 +40,7 @@ app.set('port', port);
 const server = http.createServer(app);
 
 if (!module.parent) server.listen(port, () => {
-    console.log('Started Running on localhost: '+ port);
+    console.log('Started Running on port: '+ port);
 });
 
 module.exports = {

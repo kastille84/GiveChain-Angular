@@ -1,5 +1,5 @@
 .jumbotron {
-    background-image: url('../../assets/img/meeting.jpg');
+    background-image: url('https://s3.amazonaws.com/givechain-ang/meeting.jpg');
     background-repeat: no-repeat;
     background-size: 100% auto;
 }
