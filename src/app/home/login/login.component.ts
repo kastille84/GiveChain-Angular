@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
         username: new FormControl(null, Validators.required),
         password: new FormControl(null, Validators.required)
     });
-    if (!localStorage.getItem('verified') && !localStorage.getItem('name')) {
+    if (!localStorage.getItem('verified') && !localStorage.getItem('name') && localStorage.getItem('isRegisterd')) {
       this.flashMessagesService
           .show('We emailed you with instructions to proceed. Afterwards, Come back and Login to finalize Verification', 
                 {cssClass: 'alert alert-info', timeout: 6000});

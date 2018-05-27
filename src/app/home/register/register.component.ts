@@ -59,6 +59,7 @@ export class RegisterComponent implements OnInit {
             .subscribe(
               (response) => {
                // successfully registered, redirect to Login
+               localStorage.setItem('isRegistered', 'true');
                this.router.navigate(['/login']);
               },
               (errResp) => {
