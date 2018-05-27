@@ -53,6 +53,11 @@
 @media screen and (min-width: 1025px ) and (max-width: 1600px) {
     .jumbotron p {
         font-size: 4.5rem;
+        margin:auto;
+        width: 60%;
+    }
+    .jumbotron a {
+        margin: auto;
     }
     .infoWrapper form {
         width: 40%;

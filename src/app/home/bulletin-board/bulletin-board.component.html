@@ -15,4 +15,5 @@
         [canReserve]="canReserve"
         (stickyDeleted)="regetStickies()"
         (stickyReserved)="regetStickies()"></app-sticky>
+    <h3 *ngIf="!stickies">No Stickies Available at this area</h3>
 </section>

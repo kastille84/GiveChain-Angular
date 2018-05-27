@@ -159,6 +159,7 @@ export class StickyComponent implements OnInit, OnDestroy {
             stickyItem.reservedBy = '';
           }
         }); 
+        localStorage.removeItem('reserved_id');
         // navigate away
         setTimeout(() => {
           this.router.navigate(['/dashboard']);
