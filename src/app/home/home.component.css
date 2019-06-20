@@ -2,6 +2,7 @@
     background-image: url('https://s3.amazonaws.com/givechain-ang/meeting.jpg');
     background-repeat: no-repeat;
     background-size: 100% auto;
+    min-height:250px;
 }
 
 .jumbotron p {
@@ -50,7 +51,10 @@
     }
 }
 /* LARGE DESKTOPS */
-@media screen and (min-width: 1025px ) and (max-width: 1600px) {
+@media screen and (min-width: 1025px )  {
+    .jumbotron {
+        min-height:450px;
+    }
     .jumbotron p {
         font-size: 4.5rem;
         margin:auto;
